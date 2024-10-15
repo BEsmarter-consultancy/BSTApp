@@ -358,6 +358,7 @@ normalDW<- uiOutput("normalDW")
       Models <- unique(BMAreg[["variables"]])
       nModels <- dim(Models)[1]
       nVistModels <- dim(BMAreg[["variables"]])[1]
+      K <- ncol(x)
       PMP <- NULL
       for(m in 1:nModels){
         idModm <- NULL
