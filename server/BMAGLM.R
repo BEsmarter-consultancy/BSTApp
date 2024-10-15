@@ -387,7 +387,7 @@ normalDW<- uiOutput("normalDW")
         if(length(idXs) == 0){
           Regm <- lm(y ~ 1)
         }
-        Xm <- X[, idXs]
+        Xm <- x[, idXs]
         Regm <- lm(y ~ Xm)
         SumRegm <- summary(Regm)
         Means[m, idXs] <- SumRegm[["coefficients"]][-1,1]
