@@ -402,7 +402,7 @@ normalDW<- uiOutput("normalDW")
       rownames(table)=colnames(x)
 
       rvBMA$results=table
-      rvBMA$objMC3=ayuda
+      rvBMA$objMC3=BMAreg
     }
   })
 
