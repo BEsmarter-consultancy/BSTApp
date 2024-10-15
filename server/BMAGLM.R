@@ -394,7 +394,7 @@ normalDW<- uiOutput("normalDW")
         Vars[m, idXs] <- SumRegm[["coefficients"]][-1,2]^2
       }
       BMAbeta <- colSums(Means*PMP)
-      BMAsd <- (colSums(PMP*Vars)  + colSums(PMP*(Means-matrix(rep(BMAmeans, each = nModels), nModels, K))^2))^0.5
+      BMAsd <- (colSums(PMP*Vars)  + colSums(PMP*(Means-matrix(rep(BMAbeta, each = nModels), nModels, K))^2))^0.5
       #############################
 
       table=cbind(round(PIP*100,1),formatC(BMAbeta, format = "e", digits = 3),round(BMAsd,6))
