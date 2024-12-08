@@ -32,10 +32,10 @@ write.csv(dfDLM, file = "61SimDynamicLinearModel.csv")
 # }
 # VarBp <- var(Bp)
 # a.y <- (SumRegLS$sigma^2)^(-1)
-# b.y <- 10*a.y 
+# b.y <- 10*a.y
 # a.theta <- (max(diag(VarBp)))^(-1)
 # b.theta <- 10*a.theta
 # MCMC <- 2000; burnin <- 1000; thin <- 5
 # m0 = RegLS$coefficients; C0 = VarBp
 # source("C:/Users/aramir21/Desktop/GUIwebV1/BSTApp/Models/DLM.R")
-# Res <- DLM(y = yt, x = x, m0 = m0, C0 = C0, a.y = a.y, b.y = b.y, a.theta = a.theta, b.theta = b.theta, MCMC = MCMC, thin = thin, burnin = burnin)
+# Res <- DLM(y = yt, x = x, a.y = a.y, b.y = b.y, a.theta = a.theta, b.theta = b.theta, MCMC = MCMC, thin = thin, burnin = burnin)
