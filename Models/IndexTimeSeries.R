@@ -1,3 +1,10 @@
 # Index: Time series
-source("C:/Users/aramir21/Desktop/GUIwebV1/BSTApp/Models/DLM.R")
+library(dplyr)
+library(ggplot2)
+library(latex2exp)
+library(dlm)
+dataDLM <- read.csv("https://raw.githubusercontent.com/besmarter/BSTApp/refs/heads/master/DataSim/61SimDynamicLinearModel.csv")
+source("https://raw.githubusercontent.com/besmarter/BSTApp/refs/heads/master/Models/DLM.R")
+attach(dataDLM)
+DefaultPrior <- AuxDLMprior(y = dataDLM[,1], x = dataDLM[,-1])
 Res <- DLM(y = yt, x = x, a.y = a.y, b.y = b.y, a.theta = a.theta, b.theta = b.theta, MCMC = MCMC, thin = thin, burnin = burnin)

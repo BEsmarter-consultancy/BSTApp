@@ -1,9 +1,6 @@
 # Function to perform estimation of the dynamic linear model with random walk states e independent priors of scale parameters
-library(dplyr)
-library(ggplot2)
-library(latex2exp)
-library(dlm)
 AuxDLMprior <- function(y, x){
+  x <- as.matrix(x)
   RegLS <- lm(y ~ x)
   SumRegLS <- summary(RegLS)
   Bp <- matrix(RegLS$coefficients, T, K - 1, byrow = TRUE)
@@ -19,6 +16,7 @@ AuxDLMprior <- function(y, x){
   b.theta <- 10*a.theta
   return(c(a.y, b.y, a.theta, b.theta))
 }
+
 DLM <- function(y, x, a.y, b.y, a.theta, b.theta, MCMC, thin, burnin){
   # State space model
   # y: dependent variable
