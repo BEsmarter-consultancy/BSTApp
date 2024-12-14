@@ -3,6 +3,22 @@ library(dplyr)
 library(ggplot2)
 library(latex2exp)
 library(dlm)
+AuxDLMprior <- function(y, x){
+  RegLS <- lm(y ~ x)
+  SumRegLS <- summary(RegLS)
+  Bp <- matrix(RegLS$coefficients, T, K - 1, byrow = TRUE)
+  S <- round(T*0.2, 0)
+  for(t in S:T){
+    RegLSt <- lm(yt[1:t] ~ x[1:t,])
+    Bp[t,] <- RegLSt$coefficients
+  }
+  VarBp <- var(Bp)
+  a.y <- (SumRegLS$sigma^2)^(-1)
+  b.y <- 10*a.y
+  a.theta <- (max(diag(VarBp)))^(-1)
+  b.theta <- 10*a.theta
+  return(c(a.y, b.y, a.theta, b.theta))
+}
 DLM <- function(y, x, a.y, b.y, a.theta, b.theta, MCMC, thin, burnin){
   # State space model
   # y: dependent variable
