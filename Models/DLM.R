@@ -1,12 +1,17 @@
 # Function to perform estimation of the dynamic linear model with random walk states e independent priors of scale parameters
 AuxDLMprior <- function(y, x){
+  # State space model
+  # y: dependent variable
+  # x: regressors
   x <- as.matrix(x)
   RegLS <- lm(y ~ x)
   SumRegLS <- summary(RegLS)
-  Bp <- matrix(RegLS$coefficients, T, K - 1, byrow = TRUE)
+  K <- dim(x)[2] + 1
+  T <- length(y)
+  Bp <- matrix(RegLS$coefficients, T, K, byrow = TRUE)
   S <- round(T*0.2, 0)
   for(t in S:T){
-    RegLSt <- lm(yt[1:t] ~ x[1:t,])
+    RegLSt <- lm(y[1:t] ~ x[1:t,])
     Bp[t,] <- RegLSt$coefficients
   }
   VarBp <- var(Bp)
@@ -15,9 +20,13 @@ AuxDLMprior <- function(y, x){
   a.theta <- (max(diag(VarBp)))^(-1)
   b.theta <- 10*a.theta
   return(c(a.y, b.y, a.theta, b.theta))
+  # a.y: prior mean of observation precision
+  # b.y: prior variance of observation precision
+  # a.theta: prior mean of states precision
+  # b.theta: prior variance of states precision
 }
 
-DLM <- function(y, x, a.y, b.y, a.theta, b.theta, MCMC, thin, burnin){
+DLM <- function(y, x, a.y, b.y, a.theta, b.theta, MCMC = 10000, thin = 1, burnin = 1000){
   # State space model
   # y: dependent variable
   # x: regressors

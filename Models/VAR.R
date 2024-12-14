@@ -1,14 +1,13 @@
 # Function to perform estimation of VAR models
-library(bvartools)
 VAR <- function(Y, p = 1, k0 = 2, k1 = 0.5, k3 = 5, H1 = 10, H2 = 4, type = "feir", cum = TRUE,
                 MCMC = 10000, burnin = 1000, thin = 1){
   # Y: Variables
-  # p: VAR order
-  # k0: First prior coefficient Minnesota prior
-  # k1: Second prior coefficient Minnesota prior
-  # k3: Third prior coefficient Minnesota prior
+  # p: VAR order (integer)
+  # k0: First prior coefficient Minnesota prior (positive)
+  # k1: Second prior coefficient Minnesota prior (positive)
+  # k3: Third prior coefficient Minnesota prior (positive)
   # MCMC: Number of MCMC iterations
-  # burnin: Number of burn-in iterations 
+  # burnin: Number of burn-in iterations
   # thin: Thinning parameter (To keep symmetry with other models, but it is not going to work)
   # H1: Impulse response horizon
   # H2: Forecast horizon
@@ -32,7 +31,7 @@ VAR <- function(Y, p = 1, k0 = 2, k1 = 0.5, k3 = 5, H1 = 10, H2 = 4, type = "fei
     for(j in Nom){
       Title <- paste(i, "vs", j, sep = " ")
       irMin <- bvartools::irf.bvar(objectMin, impulse = i, response = j, n.ahead = H1, type = type, cumulative = cum) # Calculate IR
-      ImpulseResonse[[l]] <- irMin 
+      ImpulseResonse[[l]] <- irMin
       dfNewMin <- tibble(t = 0:H1, mean = as.numeric(irMin[,2]), lower = as.numeric(irMin[,1]), upper = as.numeric(irMin[,3]))
       FigNewMin <- plot_IR(dfNewMin, Title)
       ImpulseResonsePlots[[l]] <- FigNewMin

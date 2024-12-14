@@ -15,12 +15,13 @@ SVM <- function(y, X, MCMC = 10000, burnin = 1000, thin = 1, mu0 = 0, sdmu0 = 10
   # B0: Prior standard deviation coefficients of regressors
   # y <- y; X <- X; MCMC <- 10000; burnin <- 10000; thin <- 5
   # mu0 <- 0; sdmu0 <- 100; sigma0 <- 1; a0 <- 5; d0 <- 1.5; b0 <- 0; B0 <- 1000
+  X <- as.matrix(X)
   model <- stochvol::svsample(y, designmatrix = X, draws = MCMC, burnin = burnin, thin = thin,
                               priormu = c(mu0, sdmu0), priorsigma = c(sigma0), priorphi = c(a0, d0),
                               priorbeta =  c(b0, B0))
-  PostSVpar <- model[["para"]][[1]][,-c(4,5)] 
-  PostBetas <- model[["beta"]] 
-  PostState <- model[["latent"]][[1]] 
+  PostSVpar <- model[["para"]][[1]][,-c(4,5)]
+  PostBetas <- model[["beta"]]
+  PostState <- model[["latent"]][[1]]
   Summary <- list()
   Summary[[1]] <- summary(PostSVpar)
   Summary[[2]] <-summary(PostBetas)
