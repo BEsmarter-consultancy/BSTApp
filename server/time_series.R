@@ -62,8 +62,8 @@ observeEvent(input$armago, {
                   varma0 = input$arma_varma0,
                   a0 = input$arma_a0,
                   d0 = input$arma_d0,
-                  mcmc = 1000,#input$it_ts,
-                  burnin = 100,#input$burnin_ts,
+                  mcmc = input$it_ts,
+                  burnin = input$burnin_ts,
                   thin = as.numeric(input$keep_ts))
 
 
