@@ -29,10 +29,37 @@ rbBMAI<- radioButtons('sepBMAI', 'Separator',
                         Tab='\t'),
                       selected=',')
 uploadBMAI=fluidRow(column(6,fileBMAI),column(3,filechBMAI),column(3,rbBMAI))
+
+
+
+#Dynamic Models
+
+fileBMADM<- fileInput('fileBMADM', 'Choose File (Model Matrix)',
+                     accept=c('text/csv',
+                              'text/comma-separated-values,text/plain',
+                              '.csv'))
+
+filechBMADM<- checkboxInput('headerBMADM', 'Header', TRUE)
+
+
+rbBMADM<- radioButtons('sepBMADM', 'Separator',
+                      c(Comma=',',
+                        Semicolon=';',
+                        Tab='\t'),
+                      selected=',')
+uploadBMADM=fluidRow(column(6,fileBMADM),column(3,filechBMADM),column(3,rbBMADM))
+
+
+
+
 numEnd=numericInput('numEnd', 'Number of Endogenous variables', value=1, min = 1, max = 20, step = 1)
+
+par1DBMA = numericInput('par1DBMA','Forgetting parameter of covariance matrix (lambda)', value=0.99, max =1, min =0)
+par2DBMA = numericInput('par2DBMA','Forgetting parameter transition model probabilities(delta)', value=0.99, max =1, min =0)
 
 summaryBMA=dataTableOutput('summaryBMA')
 summaryBMA2=dataTableOutput('summaryBMA2')
+summaryBMA3=plotOutput('summaryBMA3')
 
 #conditional for normal models
 
@@ -41,17 +68,19 @@ normaltcond<- uiOutput("normaltcond")
 normalT=radioButtons("normalT", "Which type do you want to perform?",
                      c("BIC"="1",
                        "MC3"="2",
-                       "Intrumental variable"="3")
+                       "Intrumental variable"="3",
+                       "Dynamic BMA"="4")
 )
 goBMAN1<- actionButton("goBMAN1", "Go!")
 goBMAN2<- actionButton("goBMAN2", "Go!")
 goBMAN3<- actionButton("goBMAN3", "Go!")
+goBMAN4<- actionButton("goBMAN4", "Go!")
 
 BMA_OR=numericInput('BMA_OR','OR: Number between 5 and 50.',value = 50,min = 5)
 
 BMA_OL=numericInput('BMA_OL','OL: Number between 0.0001 and 1',value = 0.0025,min = 0.0001, max=1)
 
-CNBMA=fluidPage( normalT,uploadBMA,normaltcond,br(),br(),summaryBMA)
+CNBMA=fluidPage( normalT,uploadBMA,normaltcond)
 
 
 
@@ -77,6 +106,7 @@ CGBMA=fluidPage(uploadBMA,
 DLBIC<- downloadButton('DLBIC', 'Download results using BIC')
 DLMC3<- downloadButton('DLMC3', 'Download results using MC3')
 DLMC3en<- downloadButton('DLMC3en', 'Download results using IV')
+DLDyn<- downloadButton('DLDyn', 'Download results for Dynamic Model Average')
 normalDW<- uiOutput("normalDW")
 
 
@@ -87,7 +117,8 @@ normalDW<- uiOutput("normalDW")
     switch(input$normalT,
            "1"=DLBIC,
            "2"=DLMC3,
-           "3"=DLMC3en
+           "3"=DLMC3en,
+           "4"=DLDyn
     )
 
   })
@@ -114,13 +145,13 @@ normalDW<- uiOutput("normalDW")
            "1"=fluidPage(helpText(base_help,'511SimNormalBMA.csv'),
                          br(),fluidRow(column(3,BMA_OR)),h6("Using BIC approximation: Be patient! This can take time."),
                          goBMAN1,
-                         br()),
+                         br(),br(),br(),summaryBMA),
            "2"=fluidPage(
                          helpText(base_help,'512SimNormalBMA.csv'),
                          fluidRow(column(6,itBMAMC3)),
                          h6("Performing MC3: Be patient! This can take time."),
                          goBMAN2,
-                         br()),
+                         br(),br(),br(),summaryBMA),
            "3"=fluidPage(helpText(base_help,'513SimNormalBMAivYXW.csv'),
                           uploadBMAI,
                          helpText(base_help,'513SimNormalBMAivZ.csv'),
@@ -130,8 +161,16 @@ normalDW<- uiOutput("normalDW")
                                      helpText(" First file should include a matrix [Y X W], where Y are main interest variables, X are endogeneous regressors, and W are exogenous regressors. Second file includes only the instruments (Z).")),
                          fluidRow(column(6,itBMA),column(6,it2BMA)),
                          goBMAN3, helpText("Performing Gibbs sampling: Be patient! This can take time."),
-                         summaryBMA2,br()
-           )
+                         summaryBMA2,br(),br(),br(),summaryBMA
+           ),
+           "4"=fluidPage(helpText(base_help,'D file'),
+                         uploadBMADM,
+                         helpText(base_help,'D2 file'),
+                         h6("Dynamic BMA set up"),
+                         fluidRow(column(6,par1DBMA),column(6,par2DBMA)),
+                         goBMAN4, helpText("What to add here?"),
+                         summaryBMA3,br(),br()
+           ),
     )
   })
 
@@ -147,6 +186,12 @@ normalDW<- uiOutput("normalDW")
     if (is.null(inFile1))
       return(NULL)
     read.csv(inFile1$datapath, header=input$headerBMAI, sep=input$sepBMAI)
+  })
+  dataInputBMADM <- reactive({
+    inFile1 <- input$fileBMADM
+    if (is.null(inFile1))
+      return(NULL)
+    read.csv(inFile1$datapath, header=input$headerBMADM, sep=input$sepBMADM)
   })
 
 
@@ -248,6 +293,37 @@ normalDW<- uiOutput("normalDW")
   )
 
 
+  output$DLDyn <- downloadHandler(
+    filename = 'DynamicBMA.zip',
+    content = function(fname) {
+      tmpdir <- tempdir()
+      setwd(tempdir())
+      print(tempdir())
+
+
+
+      results = rvBMA$resultDBMA
+      # PMP: Dynamic posterior model probability --> To download
+      # BetasBMAmean: Posterior BMA means --> To download
+      # BetasBMAsd: Posterior BMA standard deviation --> To download
+      # ForecastsMean: BMA forecast --> To download
+      fs <- c("Posterior model Probabilities.csv",
+              "Posterior BMA mean.csv",
+              "Posterior BMA standard deviation.csv",
+              "BMA forecast.csv")
+
+      write.csv(results$PMP, file = fs[1])
+      write.csv(results$BetasBMAmean, file = fs[2])
+      write.csv(results$BetasBMAsd, file = fs[3])
+      write.csv(results$ForecastsMean, file = fs[4])
+
+      zip(zipfile=fname, files=fs)
+      if(file.exists(paste0(fname, ".zip"))) {file.rename(paste0(fname, ".zip"), fname)}
+    },
+    contentType = "application/zip"
+  )
+
+
 
 
   output$summaryBMA <- renderDataTable({
@@ -284,6 +360,26 @@ normalDW<- uiOutput("normalDW")
     }
 
   })
+
+
+  output$summaryBMA3 <- renderPlot({
+    print('ENTER SUMMARY')
+    if(!is.null(rvBMA$resultDBMA)){
+
+      A=rvBMA$resultDBMA
+
+      print(A)
+      print('kuaslfhlskduhsdlikuh')
+
+      A$PlotPMP
+
+    }else{
+
+
+    }
+
+  })
+
 
   observeEvent(input$goBMAN1, {
     showNotification("Working on it. Running greedy algorithm", duration = 60)
@@ -522,3 +618,23 @@ normalDW<- uiOutput("normalDW")
       rvBMA$results=as.matrix(summary(aux))
     }
   })
+
+  observeEvent(input$goBMAN4, {
+    print('HERE!!HGIIHUL')
+    showNotification("Working on it. __what are we running here?__", duration = 5)
+    if (is.null(dataInputBMA())||is.null(dataInputBMADM())){
+      return()
+    }else{
+      rvBMA$type="Dynamic BMA"
+      YX=dataInputBMA()
+      Y=YX[,1]
+      X=YX[,-1]
+      models = dataInputBMADM()
+
+      ResDBMA <- DBMA(y = dataDBMA[,1], X = dataDBMA[,-1], models = modelDBMA, lambda = input$par1DBMA , delta = input$par2DBMA)
+
+
+      rvBMA$resultDBMA=ResDBMA
+    }
+  })
+

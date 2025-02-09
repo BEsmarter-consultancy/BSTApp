@@ -218,3 +218,68 @@ base_help = 'See Table 3 in our paper (Help tab) for template files to upload. Y
 
 
 
+
+##### 1. Univariate Models: First NavBar#####
+file6m<- fileInput('file6', 'Choose File',
+                   accept=c('text/csv',
+                            'text/comma-separated-values,text/plain',
+                            '.csv'))
+filech6m<- checkboxInput('header6', 'Header', TRUE)
+rb6m<- radioButtons('sep6', 'Separator',
+                    c(Comma=',',
+                      Semicolon=';',
+                      Tab='\t'),
+                    selected=',')
+
+
+
+## time series
+
+it_ts<- sliderInput("it_ts",
+                  "MCMC iterations:",
+                  value = 10000,
+                  min = 10000,
+                  max = 100000,
+                  step = 10000)
+it2_ts<- sliderInput("burnin_ts",
+                  "Burn-in Size:",
+                  value = 1000,
+                  min = 1000,
+                  max = 10000,
+                  step = 1000)
+
+it3_ts<- selectInput("keep_ts", "Thinning parameter:",
+                  choices = c("1", "5", "10", "20", "50", "100"), selected = "1")
+
+
+
+it_row_ts = fluidRow(column(4,it_ts),column(4,it2_ts),column(4,it3_ts))
+
+### ARMA
+
+arma_row1 = fluidRow(selectInput("arma_f", "Frequency:",
+                            choices = c("1", "4","12"), selected = "1"), helpText("times per year: 1 (annual data), 4 (quarterly data), 12 (monthly data)"))
+
+arma_row2 = fluidRow(column(3,numericInput('arma_p','AR order', value = 1,min = 0, step=1)), column(3,numericInput('arma_q','MA order', value = 1,min = 0, step=1)))
+arma_row3 = fluidRow(column(3,numericInput('arma_mu0','Prior Mean intercept', value = 0)),
+                     column(3,numericInput('arma_varmu0','Prior Variance Intercept', value = 1)),
+                     column(3,numericInput('arma_ar0','Prior Mean ARs', value = 0)),
+                     column(3,numericInput('arma_varar0','Prior Variance ARs', value = 0.5^2,min=0.00001)))
+arma_row4 = fluidRow(column(3,numericInput('arma_ma0','Prior Mean MAs', value = 0)),
+                     column(3,numericInput('arma_varma0','Prior Variance MAs', value = 0.5^2,min=0.00001)))
+
+                     #,numericInput('arma_ma0','Prior Mean MAs', value = 0),
+
+arma_row5 = fluidRow(column(3,numericInput('arma_a0','Shape parameter variance of the model', value = 0.01)),
+                     column(3,numericInput('arma_d0','Rape parameter variance of the model', value = 0.01)))
+
+
+
+
+
+
+# a0/2: shape parameter variance of the model
+# d0/2: rate parameter variance of the model
+# mcmc: MCMC iterations
+# burnin: burn-in iterations
+# thin: thin parameter
