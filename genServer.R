@@ -7,7 +7,7 @@
     source("Models/Xcreate.R")
     source("Models/XcreateMP.R")
 
-    #### Models ########
+    #### Models #########
     source("Models/MultiReg.R")
     # source("Models/Normal.R")
     # source("Models/Probit.R")
