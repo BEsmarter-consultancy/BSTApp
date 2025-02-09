@@ -1,4 +1,5 @@
 
+
 dep=c("rsconnect" ,"shiny","mlogit" ,"MASS" ,"AER" ,
       "mcmc","bayesm",
       "abind","bayesboot","bibtex" ,
@@ -6,7 +7,7 @@ dep=c("rsconnect" ,"shiny","mlogit" ,"MASS" ,"AER" ,
       "coda","DT","Formula","ivbma",
       "Matrix" ,"matrixcalc","RcppEigen",
       "Rdpack","rhandsontable" ,"statmod", "truncnorm"  ,
-      "stringr","MCMCpack")
+      "stringr","MCMCpack","dma",'dlm',"bvartools","stochvol","bayesforecast")
 
 needed=dep[!dep%in%installed.packages()]
 
@@ -56,6 +57,7 @@ ui <- navbarPage(tab_head,windowTitle = "BEsmarter",
   source(file.path("ui", "hierarchical.R"),  local = TRUE)$value,
   source(file.path("ui", "nonpar.R"),  local = TRUE)$value,
   source(file.path("ui", "BMAGLM.R"),  local = TRUE)$value,
+  source(file.path("ui", "time_series.R"),  local = TRUE)$value,
   source(file.path("ui", "help.R"),  local = TRUE)$value
 )
 
@@ -74,6 +76,7 @@ server <- function(input, output, session) {
   source(file.path("server", "hierarchical.R"),  local = TRUE)$value
   source(file.path("server", "nonpar.R"),  local = TRUE)$value
   source(file.path("server", "BMAGLM.R"),  local = TRUE)$value
+  source(file.path("server", "time_series.R"),  local = TRUE)$value
   source(file.path("server", "help.R"),  local = TRUE)$value
   }
 

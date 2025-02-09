@@ -6,7 +6,7 @@ dep=c("rsconnect" ,"shiny","mlogit" ,"MASS" ,"AER" ,
       "coda","DT","Formula","ivbma",
       "Matrix" ,"matrixcalc","RcppEigen",
       "Rdpack","rhandsontable" ,"statmod", "truncnorm"  ,
-      "stringr","MCMCpack")
+      "stringr","MCMCpack","dma","bvartools","stochvol","bayesforecast")
 
 needed=dep[!dep%in%installed.packages()]
 
