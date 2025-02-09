@@ -1,5 +1,5 @@
 
-    #### Auxiliary #############
+    #### Auxiliary ##############
 
     source("Models/SumDiagPlots.R")
     source("Models/Draws.R")
