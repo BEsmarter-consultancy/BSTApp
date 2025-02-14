@@ -48,7 +48,7 @@ SVM <- function(y, X, MCMC = 10000, burnin = 1000, thin = 1, mu0 = 0, sdmu0 = 10
       geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 1,
                   fill = "lightblue") +
       geom_line(aes(y = mean), colour = "blue", linewidth = 0.5) +
-      ylab(TeX("$B_{t}$")) + xlab("Time")
+      ylab(TeX("$h_{t}$")) + xlab("Time")
     print(p)
   }
   df <- tibble(t = seq(1, length(y)),
