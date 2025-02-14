@@ -10,6 +10,7 @@
     source("Models/ARMA.R")
     source("Models/SVM.R")
     source("Models/VAR.R")
+    source("Models/DBMA.R")
 
     #### Models #########
     source("Models/MultiReg.R")
