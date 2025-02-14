@@ -2,7 +2,16 @@ output$time_seriesUI <- renderUI({
 
   switch(input$Mts,
          "0"=fluidPage(),
-         "DML"=fluidPage(
+         "DML"=fluidPage(dlm_row1,dlm_row2,
+         actionButton('dlmpre', 'Pre calculate Prior'),
+          actionButton('dlmgo', 'Go!'),
+          br(),
+          h3('States Plot'),
+          plotOutput('dlm_plot1'),
+          br(),
+          verbatimTextOutput('dlm_print'),
+          br(),
+          downloadButton('dlmdwd', 'Download results')
 
            ),
          "ARMA"=fluidPage(arma_row1,arma_row2,arma_row3,arma_row4,arma_row5,actionButton('armago','Go!'), verbatimTextOutput('arma_print'), downloadButton('armadwd','Download results')
@@ -43,11 +52,16 @@ dataInput_ts <- reactive({
   read.csv(inFile1$datapath, header=input$header6, sep=input$sep6)
 })
 
-rv_ts = reactiveValues()
+rv_ts = reactiveValues(ResDLM=ResDLM)
 ### ARMA
 observeEvent(input$armago, {
 
   data = dataInput_ts()
+
+  if(is.null(data)) {
+      showNotification("Please upload data.", type = "error")
+      return(NULL)
+    }
 
 
   ResARMA <- ARMA(y = data[,1],
@@ -100,21 +114,22 @@ output$arma_print= renderPrint({
   if(!is.null(rv_ts$ResARMA)){
     res = rv_ts$ResARMA
     cat("Summary AR coefs")
-    print(res$SummaryAR[[1]])
+
+    print(res$SummaryAR)
     cat("Geweke test")
-    print(res$ARTestgeweke[[1]])
+    print(res$ARTestgeweke)
     cat("Raftery test")
-    print(res$ARTestraftery[[1]])
+    print(res$ARTestraftery)
     cat("Heidel test")
-    print(res$ARTestheidel[[1]])
+    print(res$ARTestheidel)
     cat("Summary MA coefs")
-    print(res$SummaryMA[[1]])
+    print(res$SummaryMA)
     cat("Geweke test")
-    print(res$MATestgeweke[[1]])
+    print(res$MATestgeweke)
     cat("Raftery test")
-    print(res$MATestraftery[[1]])
+    print(res$MATestraftery)
     cat("Heidel test")
-    print(res$MATestheidel[[1]])
+    print(res$MATestheidel)
 
 
     cat("Summary Intercept and sigma")
@@ -136,6 +151,10 @@ output$armadwd <- downloadHandler(
   },
 
   content = function(file) {
+    if(is.null(rv_ts$ResARMA)) {
+      showNotification("No results available. Please run the model first.", type = "error")
+      return(NULL)
+    }
     zip(zipfile=file, files="Results")
   },
   contentType = "application/zip"
@@ -147,6 +166,10 @@ output$armadwd <- downloadHandler(
 observeEvent(input$vargo, {
 
   data = dataInput_ts()
+  if(is.null(data)) {
+      showNotification("Please upload data.", type = "error")
+      return(NULL)
+    }
 
 
   ResVAR <- VAR(Y = data,
@@ -224,6 +247,10 @@ output$vardwd <- downloadHandler(
   },
 
   content = function(file) {
+    if(is.null(rv_ts$ResVAR)) {
+      showNotification("No results available. Please run the model first.", type = "error")
+      return(NULL)
+    }
     zip(zipfile=file, files="Results")
   },
   contentType = "application/zip"
@@ -252,6 +279,12 @@ observeEvent(input$svmgo, {
   data = dataInput_ts()
 
 
+  if(is.null(data)) {
+      showNotification("Please upload data.", type = "error")
+      return(NULL)
+    }
+
+
   ResSVM <- SVM(y = data[,1], X = data[,-1], MCMC = input$it_ts, burnin = input$burnin_ts, thin = as.numeric(input$keep_ts),
                 mu0 = input$svm_mu0,
                 sdmu0 = input$svm_sdmu0,
@@ -269,10 +302,10 @@ observeEvent(input$svmgo, {
   print(1)
   for (name in (names(ResSVM))){
 
-  print(name)
+
 
     if (name %in% c("PostSVpar","MeanStates","LimInferiorStates","LimSuperiorStates")) {
-      write.csv(ResSVM[name]$PostBetas[[1]],paste0(name,".csv"))
+      write.csv(ResSVM[name],paste0(name,".csv"))
 
     }
 
@@ -297,6 +330,10 @@ output$svmdwd <- downloadHandler(
   },
 
   content = function(file) {
+    if(is.null(rv_ts$ResSVM)) {
+      showNotification("No results available. Please run the model first.", type = "error")
+      return(NULL)
+    }
     zip(zipfile=file, files="Results")
   },
   contentType = "application/zip"
@@ -328,3 +365,100 @@ output$svm_print= renderPrint({
 # TestsBetas: Diagnostics of Betas --> To display in GUI
 
 
+# DLM handlers
+
+observeEvent(input$dlmpre, {
+  data = dataInput_ts()
+  if(is.null(data)) {
+      showNotification("Please upload data.", type = "error")
+      return(NULL)
+    }
+
+  # Get default priors
+  DefaultPrior <- AuxDLMprior(y = data[,1], x = data[,-1])
+
+  updateNumericInput(session, "dlm_ay", value = DefaultPrior[1])
+  updateNumericInput(session, "dlm_by", value = DefaultPrior[2])
+  updateNumericInput(session, "dlm_atheta", value = DefaultPrior[3])
+  updateNumericInput(session, "dlm_btheta", value = DefaultPrior[4])
+
+
+})
+
+
+
+observeEvent(input$dlmgo, {
+  data = dataInput_ts()
+
+  if(is.null(data)) {
+      showNotification("Please upload data.", type = "error")
+      return(NULL)
+    }
+
+  # Get default priors
+  DefaultPrior <- AuxDLMprior(y = data[,1], x = data[,-1])
+
+  # Run DLM with user inputs
+  ResDLM <- DLM(y = data[,1],
+                x = data[,-1],
+                a.y = input$dlm_ay,
+                b.y = input$dlm_by,
+                a.theta = input$dlm_atheta,
+                b.theta = input$dlm_btheta,
+                MCMC = input$it_ts,
+                burnin = input$burnin_ts,
+                thin = as.numeric(input$keep_ts))
+
+
+  unlink(file.path(path,"Results"),recursive=TRUE)
+  dir.create(file.path(path,"Results"),showWarnings = FALSE)
+  setwd(file.path(path,"Results"))
+
+
+  for (name in (names(ResDLM ))){
+
+    if (name %in% c('VarianceObs','VarianceStates','MeanStates','LimInferiorStates','LimSuperiorStates')) {
+      write.csv(ResDLM[name],paste0(name,".csv"))
+
+    }
+  }
+
+  # Save results
+  rv_ts$ResDLM = ResDLM
+})
+
+# DLM plot output
+output$dlm_plot1 = renderPlot({
+  if(!is.null(rv_ts$ResDLM)){
+
+    ggarrange(plotlist=rv_ts$ResDLM$PlotStates)
+
+  }
+})
+
+# DLM text output
+output$dlm_print = renderPrint({
+  if(!is.null(rv_ts$ResDLM)){
+    cat("Summary of posterior chains variances\n")
+    print(rv_ts$ResDLM$Summary)
+    cat("\nDiagnostics variance of observation equation\n")
+    print(rv_ts$ResDLM$TestsVarObs)
+    cat("\nDiagnostics variance of state equations\n")
+    print(rv_ts$ResDLM$TestsVarStates)
+  }
+})
+
+# DLM download handler
+output$dlmdwd <- downloadHandler(
+  filename = function() {
+    paste("DLM Results", "zip", sep=".")
+  },
+  content = function(file) {
+    if(is.null(rv_ts$ResDLM)) {
+      showNotification("No results available. Please run the model first.", type = "error")
+      return(NULL)
+    }
+    zip(zipfile=file, files="Results")
+  },
+  contentType = "application/zip"
+)

@@ -312,3 +312,15 @@ svm_row3 = fluidRow(column(3,numericInput('svm_b0','Prior mean', value = 0,min=0
                     column(3,br(),helpText("Prior for coefficients of regressors")))
 
 
+## DLM
+
+# DLM input rows
+dlm_row1 = fluidRow(
+  column(3, numericInput('dlm_ay', 'Prior mean observation precision (a.y)', value = 0.01, min = 0)),
+  column(3, numericInput('dlm_by', 'Prior variance observation precision (b.y)', value = 0.01, min = 0))
+)
+
+dlm_row2 = fluidRow(
+  column(3, numericInput('dlm_atheta', 'Prior mean states precision (a.theta)', value = 0.01, min = 0)),
+  column(3, numericInput('dlm_btheta', 'Prior variance states precision (b.theta)', value = 0.01, min = 0))
+)

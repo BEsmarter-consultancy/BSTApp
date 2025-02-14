@@ -620,7 +620,7 @@ normalDW<- uiOutput("normalDW")
   })
 
   observeEvent(input$goBMAN4, {
-    print('HERE!!HGIIHUL')
+
     showNotification("Working on it. __what are we running here?__", duration = 5)
     if (is.null(dataInputBMA())||is.null(dataInputBMADM())){
       return()
@@ -631,7 +631,7 @@ normalDW<- uiOutput("normalDW")
       X=YX[,-1]
       models = dataInputBMADM()
 
-      ResDBMA <- DBMA(y = dataDBMA[,1], X = dataDBMA[,-1], models = modelDBMA, lambda = input$par1DBMA , delta = input$par2DBMA)
+      ResDBMA <- DBMA(y = Y, X = X, models = modelDBMA, lambda = input$par1DBMA , delta = input$par2DBMA)
 
 
       rvBMA$resultDBMA=ResDBMA
