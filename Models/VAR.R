@@ -1,4 +1,11 @@
 # Function to perform estimation of VAR models
+library(dplyr)
+library(ggplot2)
+library(latex2exp)
+library(dlm)
+library(bayesforecast)
+library(stochvol)
+library(bvartools)
 VAR <- function(Y, p = 1, k0 = 2, k1 = 0.5, k3 = 5, H1 = 10, H2 = 4, type = "feir", cum = TRUE,
                 MCMC = 10000, burnin = 1000, thin = 1){
   # Y: Variables

@@ -151,3 +151,80 @@ ResVAR <- VAR(Y = dataVAR, p = 1, k0 = 2, k1 = 0.5, k3 = 5, H1 = 10, H2 = 4, typ
 # Forecasts: Forecasts --> To download
 # ForecastPlots : Forecast plots --> To display in GUI
 
+ResVAR$ForecastPlots
+
+
+for (name in (names(ResVAR))){
+  if (name=="ImpulseResonsePlots"){
+
+    for (i in 1:length(ResVAR["ImpulseResonsePlots"][[1]])){
+      pdf(paste0(name,i,".pdf"))
+      print(ResVAR["ImpulseResonsePlots"][[1]][i])
+      dev.off()
+      setEPS()
+      postscript(paste0(name,i,".eps"))
+      print(ResVAR["ImpulseResonsePlots"][[1]][i])
+      dev.off()
+
+    }
+
+  }
+
+  if (name=="ForecastPlots"){
+
+    for (i in 1:length(ResVAR["ForecastPlots"][[1]])){
+      pdf(paste0(name,i,".pdf"))
+      print(ResVAR["ForecastPlots"][[1]][i])
+      dev.off()
+      setEPS()
+      postscript(paste0(name,i,".eps"))
+      print(ResVAR["ForecastPlots"][[1]][i])
+      dev.off()
+
+    }
+
+  }
+
+
+  if (name %in% c("ImpulseResonse","Forecasts")) {
+    write.csv(ResVAR[name],paste0(name,".csv"))
+
+  }
+}
+
+
+par(mfrow = c(2,1))
+p1 = ResVAR["ImpulseResonsePlots"][[1]][1][[1]]
+p2 = ResVAR["ImpulseResonsePlots"][[1]][2][[1]]
+
+
+library(ggplot2)
+library(ggpubr)
+figure <- ggarrange(ResVAR["ImpulseResonsePlots"],
+                    ncol = 3, nrow = 3)
+
+ggarrange(plotlist=ResVAR["ImpulseResonsePlots"][[1]])
+
+
+
+#install palmerpenguins package
+install.packages("palmerpenguins")
+library(palmerpenguins)
+
+# combined plot with 2 rows and 1 column
+par(mfrow = c(2,1))
+
+# first single plot
+plot(penguins$body_mass_g,
+     penguins$flipper_length_mm,
+     main = "ScatterPlot",
+     xlab = "body_mass",
+     ylab = "flipper_length")
+
+# second single plot
+plot(penguins$bill_depth_mm,
+     penguins$bill_length_mm,
+     main = "ScatterPlot",
+     xlab = "bill_depth",
+     ylab = "bill_length")
+

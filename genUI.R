@@ -24,6 +24,9 @@ library(cellranger)
 library(clipr)
 library(mlogit)
 library(statmod)
+library(ggpubr)
+
+
 
 
 image<- img(src="logo.png", height = 200, width = "90%") #Local variable
@@ -274,12 +277,38 @@ arma_row5 = fluidRow(column(3,numericInput('arma_a0','Shape parameter variance o
                      column(3,numericInput('arma_d0','Rape parameter variance of the model', value = 0.01)))
 
 
+#VAR
+
+var_row1 = fluidRow(column(3,numericInput('var_p','VAR order', value = 1,min=0)),
+                     column(3,numericInput('var_h1','Impulse response horizon', value = 10,min=0)),
+                     column(3,numericInput('var_h2','Forecast horizon', value = 4,min=0)))
+
+var_row2 = fluidRow(column(3,numericInput('var_k0','First Prior Coefficient', value = 2,min=0)),
+                    column(3,numericInput('var_k2','Second Prior Coefficient', value = 0.5,min=0)),
+                    column(3,numericInput('var_k3','Third Prior Coefficient', value = 5,min=0)),
+                    column(3,br(),helpText("Minnesota prior coeficients (positives)")))
+
+
+var_row3 = fluidRow(column(3,selectInput('var_type',"Impulse response type",choices = c('feir','other'),selected = 'feir')),
+                    column(3,checkboxInput('var_cum','Cummulative',value = TRUE))
+                    )
 
 
 
+#SVM
 
-# a0/2: shape parameter variance of the model
-# d0/2: rate parameter variance of the model
-# mcmc: MCMC iterations
-# burnin: burn-in iterations
-# thin: thin parameter
+svm_row1 = fluidRow(column(3,numericInput('svm_mu0','Prior mu', value = 0)),
+                    column(3,numericInput('svm_sdmu0','Prior std mu', value = 100,min=0)),
+                    column(3,numericInput('svm_sigma0','Sigma', value = 1,min=0)),
+                    column(3,br(),helpText("Scaling parameter of  transformed variance")))
+
+svm_row2 = fluidRow(column(3,numericInput('svm_a0','Shape parameter', value = 5,min=0)),
+                    column(3,numericInput('svm_d0','Scale parameter', value = 1.5,min=0)),
+                    column(3,br(),helpText("Prior of the transformed parameter phi")))
+
+
+svm_row3 = fluidRow(column(3,numericInput('svm_b0','Prior mean', value = 0,min=0)),
+                    column(3,numericInput('svm_B0','Prior std', value = 10000,min=0)),
+                    column(3,br(),helpText("Prior for coefficients of regressors")))
+
+

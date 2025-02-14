@@ -6,6 +6,10 @@
     # source("Models/DrawsMP.R")
     source("Models/Xcreate.R")
     source("Models/XcreateMP.R")
+    source("Models/DLM.R")
+    source("Models/ARMA.R")
+    source("Models/SVM.R")
+    source("Models/VAR.R")
 
     #### Models #########
     source("Models/MultiReg.R")

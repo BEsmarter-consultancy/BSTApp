@@ -1,4 +1,5 @@
 # Function to perform estimation of VAR models
+library(dma)
 DBMA <- function(y, X, models, lambda = 0.99, delta = 0.99){
   # y: Dependent variable
   # X: Regressors

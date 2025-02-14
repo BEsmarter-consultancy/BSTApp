@@ -1,5 +1,12 @@
 # Function to perform estimation of stochastic volatility models
 library(stochvol)
+library(dplyr)
+library(ggplot2)
+library(latex2exp)
+library(dlm)
+library(bayesforecast)
+library(stochvol)
+library(bvartools)
 SVM <- function(y, X, MCMC = 10000, burnin = 1000, thin = 1, mu0 = 0, sdmu0 = 100, sigma0 = 1, a0 = 5, d0 = 1.5, b0 = 0, B0 = 10000){
   # y: Dependent variable
   # X: Regressors
