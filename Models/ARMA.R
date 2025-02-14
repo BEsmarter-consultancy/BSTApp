@@ -1,4 +1,11 @@
 # Function to perform estimation of ARMA models
+library(dplyr)
+library(ggplot2)
+library(latex2exp)
+library(dlm)
+library(bayesforecast)
+library(stochvol)
+library(bvartools)
 ARMA <- function(y, f = 1, p = 1, q = 1, mu0 = 0, varmu0 = 1, ar0 = 0, varar0 = 0.5^2, ma0 = 0, varma0 = 0.5^2, a0 = 0.01, d0 = 0.01, mcmc = 1000, burnin = 1000, thin = 1){
   # y: time series
   # f: frequency (times per year: 1 (annual data), 4 (quarterly data), 12 (monthly data))
