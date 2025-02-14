@@ -52,7 +52,7 @@ dataInput_ts <- reactive({
   read.csv(inFile1$datapath, header=input$header6, sep=input$sep6)
 })
 
-rv_ts = reactiveValues(ResDLM=ResDLM)
+rv_ts = reactiveValues()
 ### ARMA
 observeEvent(input$armago, {
 
@@ -63,7 +63,7 @@ observeEvent(input$armago, {
       return(NULL)
     }
 
-
+  showNotification("Working on it. Starting", duration = 5)
   ResARMA <- ARMA(y = data[,1],
                   f = as.numeric(input$arma_f),
                   p = input$arma_p,
@@ -79,6 +79,8 @@ observeEvent(input$armago, {
                   mcmc = input$it_ts,
                   burnin = input$burnin_ts,
                   thin = as.numeric(input$keep_ts))
+
+  showNotification("Creating output", duration = 5)
 
 
   unlink(file.path(path,"Results"),recursive=TRUE)
@@ -105,6 +107,8 @@ observeEvent(input$armago, {
   rv_ts$ResARMA = ResARMA
 
   setwd("..")
+
+  showNotification("Done", duration = 5)
 
 
 
@@ -171,7 +175,7 @@ observeEvent(input$vargo, {
       return(NULL)
     }
 
-
+  showNotification("Running", duration = 5)
   ResVAR <- VAR(Y = data,
                 p = input$var_p,
                 k0 = input$var_k0,
@@ -183,7 +187,7 @@ observeEvent(input$vargo, {
                 cum = TRUE,
                 MCMC = input$it_ts, burnin = input$burnin_ts, thin = as.numeric(input$keep_ts))
 
-  print('READY!')
+  showNotification("Creating output", duration = 5)
 
 
 
@@ -232,7 +236,7 @@ observeEvent(input$vargo, {
   }
   rv_ts$ResVAR = ResVAR
 
-  print('READY 2!')
+  showNotification("Done", duration = 5)
 
   setwd("..")
 
@@ -395,9 +399,7 @@ observeEvent(input$dlmgo, {
       return(NULL)
     }
 
-  # Get default priors
-  DefaultPrior <- AuxDLMprior(y = data[,1], x = data[,-1])
-
+  showNotification("Running", duration = 5)
   # Run DLM with user inputs
   ResDLM <- DLM(y = data[,1],
                 x = data[,-1],
@@ -408,6 +410,8 @@ observeEvent(input$dlmgo, {
                 MCMC = input$it_ts,
                 burnin = input$burnin_ts,
                 thin = as.numeric(input$keep_ts))
+
+  showNotification("Creating output", duration = 5)
 
 
   unlink(file.path(path,"Results"),recursive=TRUE)
@@ -425,6 +429,8 @@ observeEvent(input$dlmgo, {
 
   # Save results
   rv_ts$ResDLM = ResDLM
+
+  showNotification("Donet", duration = 5)
 })
 
 # DLM plot output
