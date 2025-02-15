@@ -409,8 +409,8 @@ observeEvent(input$dlmgo, {
                 b.y = input$dlm_by,
                 a.theta = input$dlm_atheta,
                 b.theta = input$dlm_btheta,
-                MCMC = 100,#input$it_ts,
-                burnin = 10,#input$burnin_ts,
+                MCMC = input$it_ts,
+                burnin = input$burnin_ts,
                 thin = as.numeric(input$keep_ts))
 
   showNotification("Creating output", duration = 5)
