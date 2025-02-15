@@ -409,8 +409,8 @@ observeEvent(input$dlmgo, {
                 b.y = input$dlm_by,
                 a.theta = input$dlm_atheta,
                 b.theta = input$dlm_btheta,
-                MCMC = input$it_ts,
-                burnin = input$burnin_ts,
+                MCMC = 100,#input$it_ts,
+                burnin = 10,#input$burnin_ts,
                 thin = as.numeric(input$keep_ts))
 
   showNotification("Creating output", duration = 5)
@@ -428,11 +428,12 @@ observeEvent(input$dlmgo, {
 
     }
   }
+  setwd("..")
 
   # Save results
   rv_ts$ResDLM = ResDLM
 
-  showNotification("Donet", duration = 5)
+  showNotification("Done", duration = 5)
 })
 
 # DLM plot output
@@ -463,6 +464,22 @@ output$dlmdwd <- downloadHandler(
   },
   content = function(file) {
     if(is.null(rv_ts$ResDLM)) {
+      showNotification("No results available. Please run the model first.", type = "error")
+      return(NULL)
+    }
+    zip(zipfile=file, files="Results")
+  },
+  contentType = "application/zip"
+)
+
+
+output$svmdwd <- downloadHandler(
+  filename = function() {
+    paste("SVM Results", "zip", sep=".")
+  },
+
+  content = function(file) {
+    if(is.null(rv_ts$ResSVM)) {
       showNotification("No results available. Please run the model first.", type = "error")
       return(NULL)
     }

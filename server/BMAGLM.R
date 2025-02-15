@@ -631,7 +631,7 @@ normalDW<- uiOutput("normalDW")
       X=YX[,-1]
       models = dataInputBMADM()
 
-      ResDBMA <- DBMA(y = Y, X = X, models = modelDBMA, lambda = input$par1DBMA , delta = input$par2DBMA)
+      ResDBMA <- DBMA(y = Y, X = X, models = models, lambda = input$par1DBMA , delta = input$par2DBMA)
 
 
       rvBMA$resultDBMA=ResDBMA
