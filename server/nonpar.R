@@ -46,7 +46,10 @@
     lm.coefs <- function(dat){
       coef(lm(input$Formula42, data = dat))
     }
-    bayesboot(dataInput42(), lm.coefs, R = input$itBB, R2=input$BBr2, use.weights = FALSE, .progress = "win")
+    print(input$itBB)
+    print(input$BBr2)
+    print(input$Formula42)
+    bayesboot(dataInput42(), lm.coefs, R = input$itBB, R2=input$BBr2, use.weights = FALSE)
   })
 
   ####### 4.2 Models: Download Posterior Chains ########

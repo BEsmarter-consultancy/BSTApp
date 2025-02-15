@@ -176,7 +176,10 @@ sim=function(DF){
                                        rHandsontableOutput("hotPmean"),
                                        helpText("Introduce prior covariances location parameters by row. It has to be symmetric"),
                                        rHandsontableOutput("hotPvar")
-                                       ))
+                                       )),
+             "nonpar" =isolate(wellPanel(fluidRow(column(3,FormulaM1A),column(9,HTForm))
+
+             ))
       )
 
       return(fluidPage(preview_and_aux,
@@ -589,7 +592,7 @@ sim=function(DF){
 
   output$hotPvarLP2=renderRHandsontable({
 
-    if(is.null(input$hotPmean) ){
+    if(is.null(input$hotPvarLP2) ){
       p=as.numeric(input$MultPLy)-1
       tit="mean"
       if(is.na(p)){
@@ -611,7 +614,7 @@ sim=function(DF){
       }
       a1=as.numeric(input$MultPLXA)
       ap=as.numeric(input$MultPLXD)
-      DF=hot_to_r(input$hotPmean)
+      DF=hot_to_r(input$hotPvarLP2)
       if(nrow(DF)!=p){
         DF=data.frame(diag(p))
       }
@@ -649,6 +652,9 @@ sim=function(DF){
 
   ######## 1.1 Models: Posterior Chains#########
   Posteriors11 <- eventReactive(input$goButton11, {
+
+
+
     showNotification("Working on it. Runnig MCMC sampling", duration = 60)
 
     if(input$M11=='m111'){
@@ -904,6 +910,16 @@ sim=function(DF){
                   else {
                     if (input$M11 == 'm119'){
                       do.call(MCMCquantreg, args)}
+                    else{
+                      if(input$M11=='nonpar'){
+                        lm.coefs <- function(dat){
+                          coef(lm(input$Formula1a, data = dat))
+                        }
+
+                        bayesboot(dataInput1(), lm.coefs, R = input$it, R2=input$burnin, use.weights = FALSE)
+
+                      }
+                    }
                   }
                 }
               }
@@ -935,7 +951,8 @@ sim=function(DF){
              "m116" = post11<- Draws(cbind(Posteriors11()$betadraw,Posteriors11()$cutdraw),input$burnin,as.numeric(input$keep)),
              "m117" = post11<- Draws(cbind(Posteriors11()$betadraw),input$burnin,as.numeric(input$keep)),
              "m118" = post11<- cbind(Posteriors11()),
-             "m119" = post11<- cbind(Posteriors11()))
+             "m119" = post11<- cbind(Posteriors11()),
+            "nonpar" = post11<- cbind(Posteriors11()))
       write.csv(post11, file)
     }
   )
@@ -955,7 +972,9 @@ sim=function(DF){
              "m116" = SumDiagOprobit(Posteriors11()$betadraw[,],Posteriors11()$cutdraw[,],input$it+input$burnin,input$burnin,as.numeric(input$keep)),
              "m117" = SumDiagNegBin(Posteriors11()$betadraw[,],input$it+input$burnin,input$burnin,as.numeric(input$keep)),
              "m118" = SumDiagTobit(Posteriors11()),
-             "m119" = SumDiagQuantile(Posteriors11()))
+             "m119" = SumDiagQuantile(Posteriors11()),
+             "nonpar" = SumDiagBayBoots(Posteriors11())
+             )
     }
   })
 
@@ -991,6 +1010,8 @@ sim=function(DF){
         dev.off()
       }
     }
+
+
     switch(input$M11,
            "m111" = graphs11(cbind(Posteriors11())),
            "m112" = graphs11(Posteriors11()),
@@ -1000,7 +1021,9 @@ sim=function(DF){
            "m116" = graphs11(Draws(cbind(Posteriors11()$betadraw[,],Posteriors11()$cutdraw[,]),input$burnin,as.numeric(input$keep))),
            "m117" = graphs11(Draws(cbind(Posteriors11()$betadraw[,]),input$burnin,as.numeric(input$keep))),
            "m118" = graphs11(Posteriors11()),
-           "m119" = graphs11(Posteriors11()))
+           "m119" = graphs11(Posteriors11()),
+           "nonpar" = graphs11(Posteriors11())
+           )
     setwd("..")
   })
   output$multiDownload11 <- downloadHandler(
@@ -1027,7 +1050,8 @@ sim=function(DF){
          "m116" = '16SimOrderedProbitmodel.csv     ',
          "m117" = '17SimNegBinmodel.csv     ',
          "m118" = '18SimTobitmodel.csv     ',
-         "m119" = '19SimQuantilemodel.csv     '
+         "m119" = '19SimQuantilemodel.csv     ',
+         "nonpar" = '41SimBootstrapmodel.csv    '
   )
   #base= 'See template file in the rstudio.cloud project, you can find it at DataSim/'
   text=paste0(base_help,text)
