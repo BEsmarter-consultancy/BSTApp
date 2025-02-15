@@ -163,12 +163,12 @@ normalDW<- uiOutput("normalDW")
                          goBMAN3, helpText("Performing Gibbs sampling: Be patient! This can take time."),
                          summaryBMA2,br(),br(),br(),summaryBMA
            ),
-           "4"=fluidPage(helpText(base_help,'D file'),
+           "4"=fluidPage(helpText(base_help,'55SimDynamicBMA.csv'),
                          uploadBMADM,
-                         helpText(base_help,'D2 file'),
+                         helpText(base_help,'55SimModels.csv'),
                          h6("Dynamic BMA set up"),
                          fluidRow(column(6,par1DBMA),column(6,par2DBMA)),
-                         goBMAN4, helpText("What to add here?"),
+                         goBMAN4, 
                          summaryBMA3,br(),br()
            ),
     )
@@ -621,7 +621,7 @@ normalDW<- uiOutput("normalDW")
 
   observeEvent(input$goBMAN4, {
 
-    showNotification("Working on it. __what are we running here?__", duration = 5)
+    showNotification("Working on it. ", duration = 5)
     if (is.null(dataInputBMA())||is.null(dataInputBMADM())){
       return()
     }else{

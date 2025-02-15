@@ -37,10 +37,10 @@ output$time_seriesHT <- renderUI({
 
   switch(input$Mts,
          "0"=fluidPage(),
-         "DML"=helpText(base_help,'DLM file'),
-         "ARMA"=helpText(base_help,'ARMA file'),
-         "SVM"=helpText(base_help,'SVM file'),
-         "VAR"=helpText(base_help,'VAR file')
+         "DML"=helpText(base_help,'61SimDynamicLinearModel.csv'),
+         "ARMA"=helpText(base_help,'62ARMAModels.csv'),
+         "SVM"=helpText(base_help,'63SimStochasticVolatility.csv'),
+         "VAR"=helpText(base_help,'64VARModels.csv')
   )
 })
 
