@@ -19,7 +19,7 @@ output$time_seriesUI <- renderUI({
 
 
           ),
-         "SVM"=fluidPage(svm_row1,svm_row2,svm_row3,actionButton('svmgo','Go!'), h3('Impulse Resonse Plot'),plotOutput('svm_plot1'), br(),verbatimTextOutput('svm_print'),br(), downloadButton('svmdwd','Download results')
+         "SVM"=fluidPage(svm_row1,svm_row2,svm_row3,actionButton('svmgo','Go!'), h3('Stochastic volatility Plot'),plotOutput('svm_plot1'), br(),verbatimTextOutput('svm_print'),br(), downloadButton('svmdwd','Download results')
 
 
 
@@ -136,12 +136,14 @@ output$arma_print= renderPrint({
     print(res$MATestheidel)
 
 
-    cat("Summary Intercept and sigma")
+    cat("Summary Intercept")
     print(res$Summary[[1]])
+    cat("Summary Sigma")
+    print(res$Summary[[2]])
     cat("Geweke, Raftery and Heidel tests intercept")
-    print(res$TestsVarMu[[1]])
+    print(res$TestsVarMu)
     cat("Geweke, Raftery and Heidel tests sigma")
-    print(res$TestsVarSigma[[1]])
+    print(res$TestsVarSigma)
   }
 })
 
