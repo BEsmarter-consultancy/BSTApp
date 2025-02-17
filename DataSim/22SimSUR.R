@@ -36,7 +36,8 @@ y2 = X2%*%beta2 + E[,2]
 regdata = NULL
 regdata[[1]] = list(y=y1, X=X1)
 regdata[[2]] = list(y=y2, X=X2)
-out = rsurGibbs(Data=list(regdata=regdata), Mcmc=list(R=10))
+Prior <- list(betabar = rep(0, 5), A = diag(5), nu = 5) # There is problem setting V using rsurGibbs
+out = rsurGibbs(Data=list(regdata=regdata), Mcmc=list(R=10), Prior = Prior)
 
 SumDiagSUR(out$bet,Posteriors21()$Sig[,],input$itMV+input$burninMV,input$burninMV,as.numeric(input$keepMV))
 

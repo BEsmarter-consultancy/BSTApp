@@ -797,7 +797,7 @@ ListSUR<-function(dat,m,ki){
 
       argsM <- switch(input$M21,
                      "m211" = list(Data=dataInput2(),m=as.numeric(input$EndVarNumnY),k=as.numeric(input$ExVarNumnX),Prior=list(Bbar=Bbar,A=A,nu=nu,V=V),MCMC1),
-                     "m212" = list(Data=list(regdata=SURlist), Prior=list(betabar=betabar,A=A,nu=nu,V=V), Mcmc=MCMC2), #, Prior=list(betabar=betabar,A=A,nu=nu,V=V) It seems that there is an issue with V in rsurGibbs (see email to P. Rossi)
+                     "m212" = list(Data=list(regdata=SURlist), Prior=list(betabar=betabar,A=A,nu=nu), Mcmc=MCMC2), #, Prior=list(betabar=betabar,A=A,nu=nu,V=V) It seems that there is an issue with V in rsurGibbs (see email to P. Rossi)
                      "m213" = list(list(z=as.matrix(sumtextM2b()$Z),w=as.matrix(sumtextM2a()$X[,-2]),x=sumtextM2b()$x,y=sumtextM2a()$y),list(md=Bmeanz,Ad=Bvarz,mbg=Bmeany,Abg=Bvary,nu=nu,V=V),MCMC2),
                      "m214" = list(Data=DataMP,Prior=list(betabar=betabar,A=A,nu=nu,V=V), Mcmc=MCMC2)
       )
@@ -838,7 +838,7 @@ ListSUR<-function(dat,m,ki){
     else {
       if (input$M21 == 'm212') {
 
-        V<<-argsM$Prior$V
+        # V <<- argsM$Prior$V
         out=do.call(rsurGibbs,argsM)
         out$betadraw=as.matrix(out$betadraw)
         #colnames(out$betadraw)=colnames(hot_to_r(input$hotPMeanMVSUR))
