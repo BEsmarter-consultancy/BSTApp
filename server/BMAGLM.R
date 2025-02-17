@@ -124,56 +124,6 @@ normalDW<- uiOutput("normalDW")
   })
 
 
-
-
-
-  output$CONDBMA <- renderUI({
-    switch(input$radioBMA,
-           "NS"=fluidPage(),
-           "NBMA"=fluidPage(CNBMA,br(),br(),normalDW),
-           "LBMA"=fluidPage(CLBMA,br(),br(),DLBIC),
-           "GBMA"=fluidPage(CGBMA,br(),br(),DLBIC),
-           "PBMA"=fluidPage(CPBMA,br(),br(),DLBIC)
-    )
-  })
-
-
-
-  output$normaltcond <- renderUI({
-
-    switch(input$normalT,
-           "1"=fluidPage(helpText(base_help,'511SimNormalBMA.csv'),
-                         br(),fluidRow(column(3,BMA_OR)),h6("Using BIC approximation: Be patient! This can take time."),
-                         goBMAN1,
-                         br(),br(),br(),summaryBMA),
-           "2"=fluidPage(
-                         helpText(base_help,'512SimNormalBMA.csv'),
-                         fluidRow(column(6,itBMAMC3)),
-                         h6("Performing MC3: Be patient! This can take time."),
-                         goBMAN2,
-                         br(),br(),br(),summaryBMA),
-           "3"=fluidPage(helpText(base_help,'513SimNormalBMAivYXW.csv'),
-                          uploadBMAI,
-                         helpText(base_help,'513SimNormalBMAivZ.csv'),
-                         numEnd,h6("Intrumental variable setting:"),
-                         withMathJax(helpText(" $$Y=X\\beta_{End} +W\\beta_{Ex} + \\epsilon_Y$$"),
-                                     helpText(" $$X=Z\\gamma_Z + W\\gamma_W + \\epsilon_X$$"),
-                                     helpText(" First file should include a matrix [Y X W], where Y are main interest variables, X are endogeneous regressors, and W are exogenous regressors. Second file includes only the instruments (Z).")),
-                         fluidRow(column(6,itBMA),column(6,it2BMA)),
-                         goBMAN3, helpText("Performing Gibbs sampling: Be patient! This can take time."),
-                         summaryBMA2,br(),br(),br(),summaryBMA
-           ),
-           "4"=fluidPage(helpText(base_help,'55SimDynamicBMA.csv'),
-                         uploadBMADM,
-                         helpText(base_help,'55SimModels.csv'),
-                         h6("Dynamic BMA set up"),
-                         fluidRow(column(6,par1DBMA),column(6,par2DBMA)),
-                         goBMAN4,
-                         summaryBMA3,br(),br()
-           ),
-    )
-  })
-
   ####Lectura de datos
   dataInputBMA <- reactive({
     inFile1 <- input$fileBMA
@@ -193,6 +143,68 @@ normalDW<- uiOutput("normalDW")
       return(NULL)
     read.csv(inFile1$datapath, header=input$headerBMADM, sep=input$sepBMADM)
   })
+
+
+
+  preview_bma <- aux_preview_server('preview_bma',data=dataInputBMA)
+  preview_bma_ui<- aux_preview_ui('preview_bma',data=dataInputBMA)
+  output$CONDBMA <- renderUI({
+
+    model_ui = switch(input$radioBMA,
+           "NS"=fluidPage(),
+           "NBMA"=fluidPage(CNBMA,br(),br(),normalDW),
+           "LBMA"=fluidPage(CLBMA,br(),br(),DLBIC),
+           "GBMA"=fluidPage(CGBMA,br(),br(),DLBIC),
+           "PBMA"=fluidPage(CPBMA,br(),br(),DLBIC)
+    )
+
+    model_ui
+  })
+
+
+
+  output$normaltcond <- renderUI({
+
+    switch(input$normalT,
+           "1"=fluidPage(helpText(base_help,'511SimNormalBMA.csv'),
+                         br(),fluidRow(column(3,BMA_OR)),h6("Using BIC approximation: Be patient! This can take time."),
+                         preview_bma_ui,br(),
+                         goBMAN1,
+
+                         br(),br(),br(),summaryBMA),
+           "2"=fluidPage(
+                         helpText(base_help,'512SimNormalBMA.csv'),
+                         fluidRow(column(6,itBMAMC3)),
+                         h6("Performing MC3: Be patient! This can take time."),
+                         preview_bma_ui,br(),
+                         goBMAN2,
+
+                         br(),br(),br(),summaryBMA),
+           "3"=fluidPage(helpText(base_help,'513SimNormalBMAivYXW.csv'),
+                          uploadBMAI,
+                         helpText(base_help,'513SimNormalBMAivZ.csv'),
+                         numEnd,h6("Intrumental variable setting:"),
+                         withMathJax(helpText(" $$Y=X\\beta_{End} +W\\beta_{Ex} + \\epsilon_Y$$"),
+                                     helpText(" $$X=Z\\gamma_Z + W\\gamma_W + \\epsilon_X$$"),
+                                     helpText(" First file should include a matrix [Y X W], where Y are main interest variables, X are endogeneous regressors, and W are exogenous regressors. Second file includes only the instruments (Z).")),
+                         fluidRow(column(6,itBMA),column(6,it2BMA)),
+                         preview_bma_ui,br(),
+                         goBMAN3, helpText("Performing Gibbs sampling: Be patient! This can take time."),
+                         summaryBMA2,br(),br(),br(),summaryBMA
+           ),
+           "4"=fluidPage(helpText(base_help,'55SimDynamicBMA.csv'),
+                         uploadBMADM,
+                         helpText(base_help,'55SimModels.csv'),
+                         h6("Dynamic BMA set up"),
+                         fluidRow(column(6,par1DBMA),column(6,par2DBMA)),
+                         preview_bma_ui,br(),
+                         goBMAN4,
+                         summaryBMA3,br(),br()
+           ),
+    )
+  })
+
+
 
 
   #####variable de comunicacion
