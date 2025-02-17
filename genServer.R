@@ -166,3 +166,29 @@
     #####Non-Parametric Models######
     #######Bayesian Boostrap########
     FormulaM42<- textInput("Formula42", "Main Equation", value = "")
+
+
+
+
+    get_table_big = function(aux){
+      table1=cbind(c(100,round(aux$probne0,1)),round(aux$postmean, digits = 3),round(aux$postsd,6))
+      colnames(table1)=c("p!=0","EV","SD")
+
+      table2 = t(aux$mle)
+
+
+      auxcolnames = aux$postprob
+      for (i in 1:length(auxcolnames)){
+        print(i)
+        auxcolnames[i] = paste('Model',i,paste0("PMP:",round(aux$postprob[i]*100,1),"%"))
+      }
+
+      table = data.frame(bind_cols(table1,table2))
+
+      rownames(table) = rownames(table2)
+      colnames(table) = c(colnames(table1),auxcolnames)
+
+      return (table)
+
+
+    }

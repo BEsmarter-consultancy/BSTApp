@@ -960,7 +960,7 @@ sim=function(DF){
   ####### 1.1 Models: Summary Posterior Chains##########
 
   output$summary11 <- renderPrint({
-    if(input$M11=='m110'){
+    if(input$M11=='m110' || is.null(Posteriors11()) ){
       return()}
     else{
       switch(input$M11,
