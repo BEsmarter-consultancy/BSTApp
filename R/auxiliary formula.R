@@ -1,5 +1,7 @@
 
 
+
+
 build_formula <- function(df,model){
   if (model %in% c('m114','m115')){
 
@@ -76,18 +78,18 @@ aux_formula_ui <- function(id,data=NULL) {
 
 aux_formula_server <- function(id,model,data) {
 
-  stopifnot(is.reactive(model))
   stopifnot(is.reactive(data))
 
 
 
   moduleServer(id, function(input, output, session) {
 
-
+    rv_rerun = reactiveValues(updated_data=0,updated_table=0)
     output$preview_table=renderTable({
 
 
       DF <- head(data())
+      rv_rerun$updated_table=0
       DF
 
     })
@@ -105,7 +107,8 @@ aux_formula_server <- function(id,model,data) {
         opt <- c('Dependent','Alt Specific','Not Alt Specific','None')
       }
 
-      if(is.null(input$formula_table)  ){
+      if(is.null(input$formula_table)|| rv_rerun$updated_table==0 ){
+        rv_rerun$updated_table=1
         DF <- t(data()[1,])
 
         DF <- data.frame(DF)
@@ -155,4 +158,50 @@ aux_formula_server <- function(id,model,data) {
 
   })
 }
+
+
+
+
+
+
+
+
+aux_preview_ui <- function(id,data=NULL) {
+
+  if(is.null(data)){
+
+  }else{
+    fluidPage(h3('Data preview'),tableOutput(NS(id,'preview_table')),
+              br(),
+              br()
+    )
+  }
+
+}
+
+
+
+
+aux_preview_server <- function(id,data) {
+
+  stopifnot(is.reactive(data))
+
+
+
+  moduleServer(id, function(input, output, session) {
+
+
+    output$preview_table=renderTable({
+
+
+      DF <- head(data())
+      DF
+
+    })
+  })
+}
+
+
+
+
 

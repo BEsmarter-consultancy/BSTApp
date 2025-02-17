@@ -1,6 +1,16 @@
-output$time_seriesUI <- renderUI({
+dataInput_ts <- reactive({
+  inFile1 <- input$file6
+  if (is.null(inFile1))
+    return(NULL)
+  read.csv(inFile1$datapath, header=input$header6, sep=input$sep6)
+})
 
-  switch(input$Mts,
+
+preview_ts <- aux_preview_server('preview_ts',data=dataInput_ts)
+
+output$time_seriesUI <- renderUI({
+  preview_ts_ui<- aux_preview_ui('preview_ts',data=dataInput_ts())
+  model_ui = switch(input$Mts,
          "0"=fluidPage(),
          "DML"=fluidPage(dlm_row1,dlm_row2,
          actionButton('dlmpre', 'Pre calculate Prior'),
@@ -30,6 +40,8 @@ output$time_seriesUI <- renderUI({
 
          ),
   )
+
+  fluidPage(preview_ts_ui,model_ui)
 })
 
 
@@ -45,12 +57,7 @@ output$time_seriesHT <- renderUI({
 })
 
 
-dataInput_ts <- reactive({
-  inFile1 <- input$file6
-  if (is.null(inFile1))
-    return(NULL)
-  read.csv(inFile1$datapath, header=input$header6, sep=input$sep6)
-})
+
 
 rv_ts = reactiveValues()
 ### ARMA

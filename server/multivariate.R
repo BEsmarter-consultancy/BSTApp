@@ -65,12 +65,15 @@ ListSUR<-function(dat,m,ki){
 
   ####### Output UI #####
 
+  preview_multi <- aux_preview_server('preview_multi',data=dataInput2)
+
   ##### 2.1 ########
   output$ui21 <- renderUI({
     if (input$M21=='m210'){
       return()}
     else{
-      switch(input$M21,
+      preview_multi_ui<- aux_preview_ui('preview_multi',data=dataInput2())
+      model_ui = switch(input$M21,
              "m211" = isolate(wellPanel(fluidRow(column(12,HTEndVarNum)),
                                         fluidRow(column(3,EndVarNumY),column(3,ExVarNumX)),
                                         fluidRow(column(3,HTEndVarNumY),column(3,HTExVarNumX)),
@@ -125,6 +128,8 @@ ListSUR<-function(dat,m,ki){
                               helpText("Introduce scale matrix Inverted Wishart. It has to be symmetric")
                               ))
 )
+
+      fluidPage(preview_multi_ui,model_ui)
     }
   })
   ##########Multivariate regression#########
@@ -953,7 +958,7 @@ ListSUR<-function(dat,m,ki){
   ####### 2.1 Models: Summary Posterior Chains##########
   output$summary21 <- renderPrint({
 
-    if(input$M21=='m210'){
+    if(input$M21=='m210' || is.null(Posteriors21())){
       return()}
 
     else{

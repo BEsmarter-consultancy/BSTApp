@@ -168,7 +168,7 @@ normalDW<- uiOutput("normalDW")
                          helpText(base_help,'55SimModels.csv'),
                          h6("Dynamic BMA set up"),
                          fluidRow(column(6,par1DBMA),column(6,par2DBMA)),
-                         goBMAN4, 
+                         goBMAN4,
                          summaryBMA3,br(),br()
            ),
     )
@@ -363,13 +363,11 @@ normalDW<- uiOutput("normalDW")
 
 
   output$summaryBMA3 <- renderPlot({
-    print('ENTER SUMMARY')
     if(!is.null(rvBMA$resultDBMA)){
 
       A=rvBMA$resultDBMA
 
-      print(A)
-      print('kuaslfhlskduhsdlikuh')
+
 
       A$PlotPMP
 
@@ -410,45 +408,7 @@ normalDW<- uiOutput("normalDW")
       X=YX[,-1]
       y=Y
       x=X
-      print(sapply(X,mean))
-      print(mean(Y))
-      # ayuda=MC3.REG(Y, X, num.its=input$itBMAMC3,outs.list=NULL, outliers = FALSE )
-      #
-      # pmp=ayuda$post.prob
-      #
-      # which=ayuda$variables
-      #
-      # nModels=ayuda$n.models
-      #
-      # nreg=ncol(x)
-      # betaModels=matrix(rep(0,nreg*nModels),nModels,nreg)
-      #
-      # BMAbeta=rep(0,nreg)
-      # BMAvar=rep(0,nreg)
-      # PIP=BMAbeta
-      #
-      # for (i in 1:nModels){
-      #   included=which[i,]
-      #   xred=as.matrix(x[,included])
-      #
-      #   model=lm(y ~ 0+xred)
-      #   beta=model$coefficients
-      #   betaModels[i,included]=beta
-      #   BMAbeta[included]=BMAbeta[included]+beta*pmp[i]
-      #   PIP[included]=PIP[included]+pmp[i]
-      #
-      #   ###This is following the formula for the variance
-      #   esd=coef(summary(model))[, "Std. Error"]
-      #   esd=esd^2
-      #   suma=esd+beta^2
-      #   BMAvar[included]=BMAvar[included]+suma*pmp[i]
-      # }
-      #
-      # BMAvar=BMAvar-BMAbeta^2
-      #
-      # BMAsd=(BMAvar^0.5)
 
-      # THIS IS NEW!!!!
 
       BMAreg=MC3.REG(Y, X, num.its=input$itBMAMC3,outs.list=NULL, outliers = FALSE )
       Models <- unique(BMAreg[["variables"]])
@@ -558,6 +518,7 @@ normalDW<- uiOutput("normalDW")
     if (is.null(dataInputBMA())){
       return()
     }else{
+
       rvBMA$type="Logistic using BIC approximation"
       if ((sum(dataInputBMA()[,1]==1) +sum(dataInputBMA()[,1]==0))<length(dataInputBMA()[,1])){
         rvBMA$results<-matrix("Responce variable is not as expected")
@@ -567,14 +528,12 @@ normalDW<- uiOutput("normalDW")
       Y=YX[,1]
       X=YX[,-1]
       hasta=dim(X)[2]
-      print(head(X))
-      print(cov(X))
-      print(solve(cov((X))))
-      print(head(X))
+
       aux <- bic.glm(x=X, y=Y, strict = FALSE, OR = input$BMA_OR, OR.fix = -log(input$BMA_OL)/log(input$BMA_OR), maxCol = (hasta+1), glm.family=binomial())
-      nv=dim(YX)[]
+      nv=dim(YX)[2]
       rvBMA$obj=aux
-      rvBMA$results=as.matrix(summary(aux))
+      rvBMA$results=get_table_big(aux)
+
 
     }
   })
@@ -589,13 +548,17 @@ normalDW<- uiOutput("normalDW")
         return()
       }
       YX=dataInputBMA()
+      #YX = read.csv('DataSim/52SimLogitBMA.csv')
       Y=YX[,1]
       X=YX[,-1]
       hasta=dim(X)[2]
       aux <- bic.glm(x=X, y=Y, strict = FALSE, OR = input$BMA_OR, OR.fix = -log(input$BMA_OL)/log(input$BMA_OR), maxCol = (hasta+1), glm.family=poisson())
-      nv=dim(YX)[]
+      #aux <- bic.glm(x=X, y=Y, strict = FALSE, maxCol = (hasta+1), glm.family=poisson())
+
+
+
       rvBMA$obj=aux
-      rvBMA$results=as.matrix(summary(aux))
+      rvBMA$results=get_table_big(aux)
     }
   })
   observeEvent(input$goBMAG, {
@@ -615,7 +578,7 @@ normalDW<- uiOutput("normalDW")
       aux <- bic.glm(x=X, y=Y, strict = FALSE, OR = input$BMA_OR, OR.fix = -log(input$BMA_OL)/log(input$BMA_OR), maxCol = (hasta+1),  glm.family=Gamma(link="log"))
       nv=dim(YX)[]
       rvBMA$obj=aux
-      rvBMA$results=as.matrix(summary(aux))
+      rvBMA$results=get_table_big(aux)
     }
   })
 
