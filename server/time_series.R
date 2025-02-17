@@ -6,7 +6,7 @@ output$time_seriesUI <- renderUI({
          actionButton('dlmpre', 'Pre calculate Prior'),
           actionButton('dlmgo', 'Go!'),
           br(),
-          h3('States Plot'),
+          h3('Plot of states: Mean and 95% credible interval'),
           plotOutput('dlm_plot1'),
           br(),
           verbatimTextOutput('dlm_print'),
@@ -19,7 +19,7 @@ output$time_seriesUI <- renderUI({
 
 
           ),
-         "SVM"=fluidPage(svm_row1,svm_row2,svm_row3,actionButton('svmgo','Go!'), h3('Stochastic volatility Plot'),plotOutput('svm_plot1'), br(),verbatimTextOutput('svm_print'),br(), downloadButton('svmdwd','Download results')
+         "SVM"=fluidPage(svm_row1,svm_row2,svm_row3,actionButton('svmgo','Go!'), h3('Stochastic volatility plot: Mean and 95% credible interval'),plotOutput('svm_plot1'), br(),verbatimTextOutput('svm_print'),br(), downloadButton('svmdwd','Download results')
 
 
 
