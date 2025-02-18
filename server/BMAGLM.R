@@ -83,24 +83,40 @@ BMA_OL=numericInput('BMA_OL','OL: Number between 0.0001 and 1',value = 0.0025,mi
 CNBMA=fluidPage( normalT,uploadBMA,normaltcond)
 
 
+####Lectura de datos
+dataInputBMA <- reactive({
+  inFile1 <- input$fileBMA
+  if (is.null(inFile1))
+    return(NULL)
+  read.csv(inFile1$datapath, header=input$headerBMA, sep=input$sepBMA)
+})
+
+
+preview_bma <- aux_preview_server('preview_bma',data=dataInputBMA)
+preview_bma_ui<- aux_preview_ui('preview_bma',data=dataInputBMA)
+
+
 
 #conditional for logit models
 
 goBMAL<- actionButton("goBMAL", "Go!")
 CLBMA=fluidPage(uploadBMA,
                 helpText(base_help,'52SimLogitBMA.csv'),
+                preview_bma_ui,br(),
                 br(),fluidRow(column(3,BMA_OR),column(3,BMA_OL)),h6("Logit"),goBMAL,br(),br(),summaryBMA)
 
 #conditional for Poisson models
 goBMAP<- actionButton("goBMAP", "Go!")
 CPBMA=fluidPage(uploadBMA,
                 helpText(base_help,'54SimPoissonBMA.csv'),
+                preview_bma_ui,br(),
                 br(),fluidRow(column(3,BMA_OR),column(3,BMA_OL)),h6("Poisson"),goBMAP,br(),br(),summaryBMA)
 
 #conditional for GAMMA models
 goBMAG<- actionButton("goBMAG", "Go!")
 CGBMA=fluidPage(uploadBMA,
                 helpText(base_help,'53SimGammaBMA.csv'),
+                preview_bma_ui,br(),
                 br(),fluidRow(column(3,BMA_OR),column(3,BMA_OL)),h6("Gamma"),goBMAG,br(),br(),summaryBMA)
 
 DLBIC<- downloadButton('DLBIC', 'Download results using BIC')
@@ -124,13 +140,7 @@ normalDW<- uiOutput("normalDW")
   })
 
 
-  ####Lectura de datos
-  dataInputBMA <- reactive({
-    inFile1 <- input$fileBMA
-    if (is.null(inFile1))
-      return(NULL)
-    read.csv(inFile1$datapath, header=input$headerBMA, sep=input$sepBMA)
-  })
+
   dataInputBMAI <- reactive({
     inFile1 <- input$fileBMAI
     if (is.null(inFile1))
@@ -146,8 +156,9 @@ normalDW<- uiOutput("normalDW")
 
 
 
-  preview_bma <- aux_preview_server('preview_bma',data=dataInputBMA)
-  preview_bma_ui<- aux_preview_ui('preview_bma',data=dataInputBMA)
+
+
+
   output$CONDBMA <- renderUI({
 
     model_ui = switch(input$radioBMA,
