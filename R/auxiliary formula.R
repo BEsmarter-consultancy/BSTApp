@@ -84,12 +84,14 @@ aux_formula_server <- function(id,model,data) {
 
   moduleServer(id, function(input, output, session) {
 
-    rv_rerun = reactiveValues(updated_data=0,updated_table=0)
+    rv_rerun = reactiveValues(updated_table=0)
     output$preview_table=renderTable({
 
 
       DF <- head(data())
       rv_rerun$updated_table=0
+      #print(rv_rerun$updated_table)
+
       DF
 
     })
@@ -108,7 +110,9 @@ aux_formula_server <- function(id,model,data) {
       }
 
       if(is.null(input$formula_table)|| rv_rerun$updated_table==0 ){
-        rv_rerun$updated_table=1
+
+        rv_rerun$updated_table= 1
+        print(rv_rerun$updated_table)
         DF <- t(data()[1,])
 
         DF <- data.frame(DF)

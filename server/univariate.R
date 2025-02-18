@@ -651,10 +651,11 @@ sim=function(DF){
   })
 
   ######## 1.1 Models: Posterior Chains#########
+  rv_current_result = reactiveValues(model = '')
   Posteriors11 <- eventReactive(input$goButton11, {
 
 
-
+    rv_current_result$model = input$M11
     showNotification("Working on it. Runnig MCMC sampling", duration = 60)
 
     if(input$M11=='m111'){
@@ -960,8 +961,11 @@ sim=function(DF){
   ####### 1.1 Models: Summary Posterior Chains##########
 
   output$summary11 <- renderPrint({
-    if(input$M11=='m110' || is.null(Posteriors11()) ){
-      return()}
+    if(input$M11=='m110' || is.null(Posteriors11()) || rv_current_result$model != input$M11){
+      #print(rv_current_result$model)
+      #print(input$M11)
+      cat('No results yet')
+      }
     else{
       switch(input$M11,
              "m111" = SumDiagNormal(Posteriors11()),

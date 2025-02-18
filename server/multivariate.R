@@ -736,7 +736,7 @@ ListSUR<-function(dat,m,ki){
 
   Posteriors21 <- eventReactive(input$goButton21, {
     #showNotification("Working on it. Runnig MCMC sampling", duration = 60)
-
+    rv_current_result$model = input$M21
     if(input$M21=='m211'){
       Bbar<- hot_to_r(input$hotPMeanMV)
       A<- solve(as.matrix(hot_to_r(input$hotPVarMV)))
@@ -958,7 +958,7 @@ ListSUR<-function(dat,m,ki){
   ####### 2.1 Models: Summary Posterior Chains##########
   output$summary21 <- renderPrint({
 
-    if(input$M21=='m210' || is.null(Posteriors21())){
+    if(input$M21=='m210' || is.null(Posteriors21())  || rv_current_result$model != input$M21 ){
       return()}
 
     else{
