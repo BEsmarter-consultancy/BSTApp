@@ -312,7 +312,7 @@ sim=function(DF){
   ######## 3.1 Models: Posterior Chains#########
   Posteriors31 <- eventReactive(input$goButton31, {
     showNotification("Working on it. Runnig Gibbs sampler", duration = 60)
-
+    rv_current_result$model = input$M31
     BmeanFix<- hot_to_r(input$hotPmeanH)[,1]
     BvarFix<- solve(as.matrix(hot_to_r(input$hotPvarH)))
 
@@ -394,7 +394,7 @@ sim=function(DF){
   ####### 3.1 Models: Summary Posterior Chains##########
 
   output$summary31 <- renderPrint({
-    if(input$M31=='m310'){
+    if(input$M31=='m310' || is.null(Posteriors31()) || rv_current_result$model != input$M31){
       return()}
     else{
       switch(input$M31,
