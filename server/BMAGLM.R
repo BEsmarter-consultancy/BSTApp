@@ -351,22 +351,28 @@ normalDW<- uiOutput("normalDW")
   output$summaryBMA <- renderDataTable({
     if(!is.null(rvBMA$results)){
 
-      A=rvBMA$results
-
-      dt=datatable(A,options = list(
-        pageLength = nrow(A)),caption = rvBMA$type)
-
       c1 = (input$radioBMA %in% c("LBMA","GBMA","PBMA"))
       c2 = ( (input$radioBMA=="NBMA") && (input$normalT=="1"))
 
+      A=rvBMA$results
+
+
+
+
+
 
      if ( c1|| c2) {
+        A= A [,1:8]
         cols_numeric = colnames(A)[-(1:2)]
+        dt=datatable(A,options = list(
+          pageLength = nrow(A)),caption = paste(rvBMA$type,'Top 5 models'))
 
         dt%>%
           formatRound(cols_numeric)
 
      }else{
+       dt=datatable(A,options = list(
+         pageLength = nrow(A)),caption = rvBMA$type)
 
        dt
 
