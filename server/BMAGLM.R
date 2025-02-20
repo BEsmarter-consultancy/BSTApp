@@ -174,6 +174,8 @@ normalDW<- uiOutput("normalDW")
 
 
 
+
+
   output$normaltcond <- renderUI({
 
     switch(input$normalT,
@@ -238,11 +240,8 @@ normalDW<- uiOutput("normalDW")
 
       fs <- c("Descriptive Statistics Coefficients.csv", "Best Models.csv")
       obj=rvBMA$obj
-      aux=summary(obj)
-      aux11=matrix(as.numeric(aux[1:(nrow(aux)-5),1:3]),ncol=3)
-      colnames(aux11)=c("p!=0","EV","SD")
-      rownames(aux11)=rownames(aux)[1:(nrow(aux)-5)]
-      write.csv(aux11, file = fs[1])
+
+      write.csv(get_table_big(obj), file = fs[1])
       RES<-cbind(obj$which,obj$postprob)
       rownames(RES)<-paste("Model",1:nrow(obj$which))
       colnames(RES)<-c(paste("x",1:ncol(obj$which)),"PostProb")
@@ -356,7 +355,24 @@ normalDW<- uiOutput("normalDW")
 
       dt=datatable(A,options = list(
         pageLength = nrow(A)),caption = rvBMA$type)
-      dt
+
+      c1 = (input$radioBMA %in% c("LBMA","GBMA","PBMA"))
+      c2 = ( (input$radioBMA=="NBMA") && (input$normalT=="1"))
+
+
+     if ( c1|| c2) {
+        cols_numeric = colnames(A)[-(1:2)]
+
+        dt%>%
+          formatRound(cols_numeric)
+
+     }else{
+
+       dt
+
+     }
+
+
 
     }else{
       a=matrix(c("No results yet","Upload data and click the go button"))
@@ -416,7 +432,7 @@ normalDW<- uiOutput("normalDW")
       aux <- bicreg(x=X, y=Y, strict = FALSE, OR = input$BMA_OR, maxCol = (hasta+1))
       nv=dim(YX)[]
       rvBMA$obj=aux
-      rvBMA$results=as.matrix(summary(aux))
+      rvBMA$results=get_table_big(aux)#as.matrix(summary(aux))
       rvBMA$objBIC=aux
     }
   })
@@ -555,6 +571,7 @@ normalDW<- uiOutput("normalDW")
       aux <- bic.glm(x=X, y=Y, strict = FALSE, OR = input$BMA_OR, OR.fix = -log(input$BMA_OL)/log(input$BMA_OR), maxCol = (hasta+1), glm.family=binomial())
       nv=dim(YX)[2]
       rvBMA$obj=aux
+      summary(aux)
       rvBMA$results=get_table_big(aux)
 
 
