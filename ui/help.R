@@ -6,7 +6,7 @@ tabPanel("Help",
              image,
              h4("Professor Andres Ramirez Hassan"),
              h4("Mateo Graciano Londono"),
-             h4(span("besmarter.team@gmail.com", style = "color:blue"))),
+             h4(span("aramir21@gmail.com", style = "color:blue"))),
            mainPanel(
            h4(a(em(strong('Ramirez-Hassan, A. & Graciano-Londono, M. (2019). "A GUIded tour of Bayesian regression"',style = 'color:light blue')),href = "http://www.besmarter-team.org/files/working_papers/A%20GUIded%20tour%20of%20Bayesian%20regression.pdf")
            ),

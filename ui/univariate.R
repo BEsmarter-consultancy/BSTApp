@@ -10,7 +10,7 @@ tabPanel("Univariate Models",
            ),
            mainPanel(fluidRow(column(5,file1m),column(2,filech1m),column(2,rb1m)),
                      uiOutput("univariate_help_data"),
-                     fluidRow(column(4,it1),column(4,it2),column(4,it3)),h1('down'),DUI11,HT,go11,BE,DL11,DLP11,verbatimTextOutput("summary11"),pplot11)),
+                     fluidRow(column(4,it1),column(4,it2),column(4,it3)),DUI11,HT,go11,BE,DL11,DLP11,verbatimTextOutput("summary11"),pplot11)),
 
   uiOutput("univariate")
 )
