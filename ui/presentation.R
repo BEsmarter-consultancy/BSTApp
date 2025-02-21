@@ -6,7 +6,7 @@ tabPanel("Presentation",
                         image,
                         h4("Professor Andres Ramirez Hassan"),
                         h4("Mateo Graciano Londono"),
-                        h4(span("besmarter.team@gmail.com" , style = "color:blue"))),
+                        h4(span("aramir21@gmail.com" , style = "color:blue"))),
            mainPanel(h3(a(em(strong("BEsmarter",style = "color:light blue")),href = "http://www.besmarter-team.org/")," is a team of friends from ", a("Universidad EAFIT", href ="http://www.eafit.edu.co/Paginas/index.aspx"), " (Medellin, Colombia) that promoves research, teaching and encoding of Bayesian Econometrics with social responsibility."
            ),
            h3("Bayesian Econometrics allows establishing a framework that simultaneously unifies decision theory, statistical inference, and probability theory under a single philosophically and mathematically consistent structure."),
