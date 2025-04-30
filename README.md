@@ -18,7 +18,7 @@ shiny::runGitHub('besmarter/BSTApp', launch.browser = TRUE)
 and follow the steps that we describe in our paper “A GUIded tour of Bayesian regression” which is located in the "Help" tab in our GUI (top panel, left tab).
 
 ## Usage from posit Cloud
-Get into https://posit.cloud/content/4328505, log in or sing up in posit Cloud. Once you are in this project (GUIded Bayesian regression app BSTApp thanks to Associate Professor Carlos Mendez from Nagoya University), click on BSTApp-master folder in the right-bottom window (Files), then click on app.R file, and finally click on Run App button. 
+Get into [https://posit.cloud/content/4328505](https://posit.cloud/content/10283833), log in or sing up in posit Cloud. Once you are in this project (BEsmarterGUI), click on BSTApp folder in the right-bottom window (Files), then click on app.R file, and finally click on Run App button. 
 
 ## Usage from a docker image (Recomended)
 
