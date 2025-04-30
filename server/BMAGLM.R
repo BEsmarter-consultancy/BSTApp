@@ -68,7 +68,7 @@ normaltcond<- uiOutput("normaltcond")
 normalT=radioButtons("normalT", "Which type do you want to perform?",
                      c("BIC"="1",
                        "MC3"="2",
-                       "Intrumental variable"="3",
+                       "Instrumental variable"="3",
                        "Dynamic BMA"="4")
 )
 goBMAN1<- actionButton("goBMAN1", "Go!")
