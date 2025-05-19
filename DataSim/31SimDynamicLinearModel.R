@@ -3,7 +3,7 @@ rm(list = ls())
 set.seed(010101)
 T <- 200; sig2 <- 0.5^2
 x <- matrix(rnorm(T*2, mean = 1, sd = 1), T, 2)
-X <- cbind(1, x); B0 <- c(1, 0.5, -0-7)
+X <- cbind(1, x); B0 <- c(1, 0.5, -0.7)
 K <- length(B0)
 e <- rnorm(T, mean = 0, sd = sig2^0.5)
 Omega <- diag(c(0.2, 0.1, 0.3))
@@ -21,7 +21,7 @@ for(t in 1:T){
 }
 dfDLM <- as.data.frame(cbind(yt, x))
 names(dfDLM) <- c("y", "x1", "x2")
-write.csv(dfDLM, file = "61SimDynamicLinearModel.csv")
+write.csv(dfDLM, file = "31SimDynamicLinearModel.csv")
 # RegLS <- lm(yt ~ x)
 # SumRegLS <- summary(RegLS)
 # Bp <- matrix(RegLS$coefficients, T, K, byrow = TRUE)
