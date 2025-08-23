@@ -4,9 +4,9 @@ tabPanel("Multivariate Models",
              radioButtons("M21", "Models",
                           c("No Selection"="m210","Simple Multivariate"="m211", "Seemingly Unrelated Regression"="m212","Instrumental Variable (Two Equations)"="m213","Multivariate Probit"="m214")
              ),
-             h1(a(em(strong("BEsmarter",style = "color:light blue")),href = "http://www.besmarter-team.org/")),
+             h1(a(em(strong("BEsmarter",style = "color:light blue")),href = "https://sites.google.com/view/arh-bayesian")),
              h2("Bayesian Econometrics: simulations, models and applications to research, teaching and encoding with responsibility"),
-             image 
+             image
            ),
            mainPanel(fluidRow(column(5,file2m),column(2,filech2m),column(2,rb2m)),
                      uiOutput("multivariate_help_data"),

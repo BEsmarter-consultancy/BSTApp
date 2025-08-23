@@ -48,7 +48,7 @@ image<- img(src="logo.png", height = 200, width = "90%") #Local variable
 ## Load General conditions, packages and other stuff necesary for run the app UI
 source(file.path("genUI.R"),  local = TRUE)$value
 
-tab_head=a(em(strong("BEsmarter",style = "color:light blue")),href = "http://www.besmarter-team.org/")
+tab_head=a(em(strong("BEsmarter",style = "color:light blue")),href = "https://sites.google.com/view/arh-bayesian")
 #tab_head=strong("BEsmarter",style = "color:light blue")
 #tab_head="BEsmarter"
 ui <- navbarPage(tab_head,windowTitle = "BEsmarter",
