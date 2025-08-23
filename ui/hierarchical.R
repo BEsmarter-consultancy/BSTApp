@@ -5,7 +5,7 @@ tabPanel("Hierarchical Longitudinal Models",
              radioButtons("M31", "Models",
                           c("No Selection"="m310","Normal"="m311", "Logit"="m312","Poisson"="m313")
              ),
-             h1(a(em(strong("BEsmarter",style = "color:light blue")),href = "http://www.besmarter-team.org/")),
+             h1(a(em(strong("BEsmarter",style = "color:light blue")),href = "https://sites.google.com/view/arh-bayesian")),
              h2("Bayesian Econometrics: simulations, models and applications to research, teaching and encoding with responsibility"),
              image
            ),

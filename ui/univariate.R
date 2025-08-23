@@ -5,6 +5,7 @@ tabPanel("Univariate Models",
                           c("No Selection"="m110","Normal"="m111", "Logit"="m112","Probit"="m113","Multinomial Probit"="m114",
                             "Multinomial Logit"="m115","Ordered Probit"="m116","Negative Binomial(Poisson)"="m117","Tobit"="m118","Quantile"="m119",'Non Parametric (Bootstrap)'='nonpar')
              ),
+             h1(a(em(strong("BEsmarter",style = "color:light blue")),href = "https://sites.google.com/view/arh-bayesian")),
                           h2("Bayesian Econometrics: simulations, models and applications to research, teaching and encoding with responsibility"),
              image
            ),
