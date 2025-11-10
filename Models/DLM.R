@@ -65,23 +65,29 @@ DLM <- function(y, x, a.y, b.y, a.theta, b.theta, MCMC = 10000, thin = 1, burnin
   StatesMean <- apply(gibbsOut[["theta"]], c(1,2), mean)
   StatesLimInf <- apply(gibbsOut[["theta"]], c(1,2), function(x){quantile(x, c(0.025))})
   StatesLimSup <- apply(gibbsOut[["theta"]], c(1,2), function(x){quantile(x, c(0.975))})
-  plot_filtering_estimates <- function(df) {
+  plot_filtering_estimates <- function(df, i) {
     p <- ggplot(data = df, aes(x = t)) +
-      geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 1,
-                  fill = "lightblue") +
+      geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 1, fill = "lightblue") +
       geom_line(aes(y = mean), colour = "blue", linewidth = 0.5) +
-      ylab(TeX("$B_{t}$")) + xlab("Time")
-    print(p)
+      ylab(TeX("$B_{t}$")) +
+      xlab("Time") +
+      ggtitle(paste0("State B_", i)) +   # <-- add title dynamically
+      theme_bw()
+
+    return(p)
   }
+
   PlotsStates <- list()
-  for(i in 1:(K-1)){
-    df <- tibble(t = seq(1, T),
-                 mean = StatesMean[-1, i],
-                 lower = StatesLimInf[-1, i],
-                 upper = StatesLimSup[-1, i])
-    ggplot2::theme_set(theme_bw())
-    PlotsStates[[i]] <- plot_filtering_estimates(df)
+  for (i in 1:(K - 1)) {
+    df <- tibble(
+      t = seq(1, T),
+      mean = StatesMean[-1, i],
+      lower = StatesLimInf[-1, i],
+      upper = StatesLimSup[-1, i]
+    )
+    PlotsStates[[i]] <- plot_filtering_estimates(df, i)
   }
+
   return(list(VarianceObs = VarObs, VarianceStates = VarStates, MeanStates = StatesMean,
               LimInferiorStates = StatesLimInf, LimSuperiorStates = StatesLimSup,
               PlotStates = PlotsStates, Summary = Summary, TestsVarObs = TestsVarObs,
