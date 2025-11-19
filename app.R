@@ -27,7 +27,8 @@ if (length(needed)>0){
     if (p=="ivbma"){
       install.packages("https://cran.r-project.org/src/contrib/Archive/ivbma/ivbma_1.05.tar.gz", repos = NULL, type = "source")
     }else if (p=="MCMCpack"){
-      install.packages("https://cran.r-project.org/src/contrib/Archive/MCMCpack/MCMCpack_1.4-4.tar.gz", repos = NULL, type = "source")
+      # install.packages("https://cran.r-project.org/src/contrib/Archive/MCMCpack/MCMCpack_1.4-4.tar.gz", repos = NULL, type = "source")
+      install.packages("https://github.com/BEsmarter-consultancy/BSTApp/blob/master/MCMCpack_1.7-1.tar.gz", repos = NULL, type = "source")
     }else{
       install.packages(p)
     }
