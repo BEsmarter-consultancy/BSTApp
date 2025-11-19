@@ -12,14 +12,13 @@ tabPanel("Presentation",
            h3("Bayesian Econometrics allows establishing a framework that simultaneously unifies decision theory, statistical inference, and probability theory under a single philosophically and mathematically consistent structure."),
            br(),
            h3(strong("VISION")),
-           h4(a(em(strong("BEsmarter",style = "color:light blue")),href = "https://sites.google.com/view/arh-bayesian"), "envisions a worldwide econometric research, teaching and applications based on a Bayesian framework that:"),
-           h4(em("inspire"), " new econometric ideas."),
-           h4(em("create"), " a user friendly environment for applications of Bayesian econometrics."),
-           h4(em("transform"), " clasic econometric research, teaching and applications."),
-           h4("and where one of the main concerns of science is to solve social problems."),
+           h4(a(em(strong("BEsmarter",style = "color:light blue")),href = "https://sites.google.com/view/arh-bayesian"), " envisions a global econometric community in which research, teaching, and applied work are grounded in a Bayesian framework that:"),
+           h4(em("inspires"), " new econometric ideas,"),
+           h4(em("creates"), " a user-friendly environment for Bayesian econometric applications, and"),
+           h4(em("transforms"), " classical approaches to econometric research, teaching, and practice."),
            br(),
            h3(strong("MISSION")),
-           h4(a(em(strong("BEsmarter",style = "color:light blue")),href = "https://sites.google.com/view/arh-bayesian"), "leads and excels in the generation and dissemination of Bayesian Econometric knowledge through research, teaching and software.")
+           h4(a(em(strong("BEsmarter",style = "color:light blue")),href = "https://sites.google.com/view/arh-bayesian"), "leads and excels in the generation and dissemination of Bayesian econometric knowledge through research, teaching and software.")
            )),
   uiOutput("presentation")
 )
