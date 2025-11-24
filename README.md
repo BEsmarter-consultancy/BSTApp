@@ -23,8 +23,8 @@ Get into [https://posit.cloud/content/10283833](https://posit.cloud/content/1028
 ## Usage from a docker image (Recomended)
 
 ```bash
-docker pull magralo95/besmartergui:latest
-docker run --rm -p 3838:3838 magralo95/besmartergui
+docker pull aramir21/besmartergui:latest
+docker run --rm -p 3838:3838 aramir21/besmartergui
 ```
 
 Then you can access the app going to 127.0.0.1:3838 or http://localhost:3838/
