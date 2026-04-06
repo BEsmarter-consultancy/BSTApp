@@ -1,8 +1,8 @@
 # BEsmarterGUI
 
-## Summary Video
+## YouTube channel: video tutorials
 
-https://youtu.be/oF43oKd-A4Q
+[https://youtu.be/oF43oKd-A4Q](https://www.youtube.com/@besmarterteam1089)
 
 ## What is  this project?
 This app is designed to make Bayesian regression analysis easier for applied researchers and practitioners who do not have programming skills. Although there are many R packages that facilitate Bayesian regression analysis, they still require users to write code. Our goal is to remove this barrier so that applied researchers and practitioners can use Bayesian techniques through a simple and intuitive graphical interface.
