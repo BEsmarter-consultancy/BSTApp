@@ -371,7 +371,8 @@ sim=function(DF){
       DF=hot_to_r(input$hotCvar)
       nc=ncol(DF)
       if (input$m116numAlt>2){
-        if(colnames(DF)=="No.cut.points"){
+        # if(colnames(DF)=="No.cut.points"){
+        if (ncol(DF) == 1 && colnames(DF)[1] == "No.cut.points") {
           nv = input$m116numAlt-2
           DF=as.data.frame(diag(nv))
           rownames(DF)=paste("cut",1:nv)
